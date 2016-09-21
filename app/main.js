@@ -1,32 +1,39 @@
 import './css/style.css';
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import TodoForm from './components/form/form.js';
+import PostForm from './components/form/form.js';
+import AddButton from './components/buttons/AddButton.js'
+import FavButton from './components/buttons/FavButton.js'
+
 import ListGroup from 'react-bootstrap/lib/ListGroup.js';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js';
-
 import FormGroup from 'react-bootstrap/lib/FormGroup.js';
 import FormControl from 'react-bootstrap/lib/FormControl.js';
-import AddButton from './components/buttons/AddButton.js';
 
+class PostBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {data: []};
 
-var PostBox = React.createClass({
-  loadPostsFromServer: function() {
+    this.loadPostsFromServer  = this.loadPostsFromServer.bind(this);
+    this.handlePostSubmit     = this.handlePostSubmit.bind(this);
+    this.componentDidMount    = this.componentDidMount.bind(this);
+  }
+  loadPostsFromServer() {
     $.ajax({
       url: this.props.url,
       dataType: 'json',
       cache: false,
       success: function(data) {
         this.setState({data: data});
-        // console.log(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-  },
-  handlePostSubmit: function(post) {
+  }
+  handlePostSubmit(post) {
     var posts = this.state.data;
 
     post.id = Date.now();
@@ -46,19 +53,21 @@ var PostBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-  },
-  getInitialState: function() {
-    return {data: []};
-  },
-  componentDidMount: function() {
+  }
+  componentDidMount() {
     this.loadPostsFromServer();
     setInterval(this.loadPostsFromServer, this.props.pollInterval);
-  },
-  render: function () {
+  }
+  handleKeyDown(event) {
+    if (event.keyCode == 13) {
+      this.handleSubmit(e);
+    }
+  }
+  render() {
     return (
       <div className="container">
         <div className="row">
-          <PostForm onPostSubmit={this.handlePostSubmit} />
+          <FormBox onPostSubmit={this.handlePostSubmit} />
         </div>
         <div className="row">
           <PostList data={this.state.data} />
@@ -67,49 +76,60 @@ var PostBox = React.createClass({
       </div>
     );
   }
-});
+}
 
-// var PostForm = React.createClass({
-//   render: function() {
+// class FormBox extends React.Component {
+//   render() {
 //     return (
 //       <div className="col-lg-12">
 //         <div className="ta-center md-margintop md-marginbot">
-//           <TodoForm />
+//           <PostForm />
 //         </div>
 //       </div>
 //     );
 //   }
-// });
-var PostForm = React.createClass({
-  getInitialState: function() {
-   return {text: ''};
-  },
-  handleTextChange: function(e) {
+// }
+
+class FormBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {text: ''};
+
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleSubmit     = this.handleSubmit.bind(this);
+    this.handleKeyDown    = this.handleKeyDown.bind(this);
+  }
+  handleTextChange(e) {
     this.setState({text: e.target.value});
-  },
-  handleSubmit: function(e) {
+  }
+  handleSubmit(e) {
     e.preventDefault();
     var text = this.state.text.trim();
 
     if(!text) {
       return;
     }
-
     this.props.onPostSubmit({text: text});
     this.setState({text: ''});
-  },
-  render: function() {
+  }
+  handleKeyDown(e) {
+    if(e.keyCode == 13) {
+      this.handleSubmit(e);
+    }
+  }
+  render() {
     return (
       <div className="col-lg-12">
         <div className="ta-center md-margintop md-marginbot">
-          <form onSubmit={this.handleSubmit} >
+          <form onSubmit={this.handleSubmit}>
             <FormGroup>
               <FormControl
                 className="center"
                 componentClass="textarea"
-                placeholder="Write a Post..."
+                placeholder="Write a Note..."
                 value={this.state.text}
                 onChange={this.handleTextChange}
+                onKeyDown={this.handleKeyDown}
               />
               <div className="sm-margintop">
                 <AddButton />
@@ -120,10 +140,36 @@ var PostForm = React.createClass({
       </div>
     );
   }
-});
+}
 
-var PostList = React.createClass({
-  render: function() {
+class PostList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    var postNodes = this.props.data.map(function(post) {
+      return (
+        <Post key={post.id} >
+          {post.text}
+          <span>
+            <FavButton />
+          </span>
+        </Post>
+      );
+    });
+    return (
+      <div className="col-lg-6">
+        <h3 className="sm-marginbot">Note List</h3>
+        <ListGroup className="list">
+          {postNodes}
+        </ListGroup>
+      </div>
+    );
+  }
+}
+
+class FavouriteList extends React.Component {
+  render() {
     var postNodes = this.props.data.map(function(post) {
       return (
         <Post key={post.id}>
@@ -132,44 +178,23 @@ var PostList = React.createClass({
       );
     });
     return (
-      <div className="col-lg-6 ta-center">
-        <h3 className="sm-marginbot">Post List</h3>
+      <div className="col-lg-6">
+        <h3 className="sm-marginbot">Favourites Notes</h3>
         <ListGroup>
           {postNodes}
         </ListGroup>
       </div>
     );
   }
-});
+}
 
-var FavouriteList = React.createClass({
-  render: function () {
-    var favouriteNodes = this.props.data.map(function (post) {
-      return (
-        <Post key={post.id}>
-          {post.text}
-        </Post>
-      );
-    });
+class Post extends React.Component {
+  render() {
     return (
-      <div className="col-lg-6 ta-center">
-        <h3 className="sm-marginbot">Favourite List</h3>
-        <ListGroup>
-          {favouriteNodes}
-        </ListGroup>
-      </div>
+      <ListGroupItem>{this.props.children} </ListGroupItem>
     );
   }
-});
-
-
-var Post = React.createClass({
-  render: function() {
-    return (
-      <ListGroupItem>{this.props.children}</ListGroupItem>
-    );
-  }
-});
+}
 
 ReactDOM.render(
   <PostBox url="/api/posts" pollInterval={2000} />,
