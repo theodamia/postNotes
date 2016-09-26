@@ -12,7 +12,6 @@ export default class PostForm extends React.Component {
 
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSubmit     = this.handleSubmit.bind(this);
-    // this.onPostSubmit     = this.onPostSubmit.bind(this);
   }
   handleTextChange(e) {
     this.setState({text: e.target.value});
@@ -27,9 +26,6 @@ export default class PostForm extends React.Component {
     this.props.onPostSubmit({text: text});
     this.setState({text: ''});
   }
-  // onPostSubmit(text) {
-  // this.props.onPostSubmit({text: text});
-  // }
   render() {
     return (
       <form onSubmit={this.handleSubmit} >
