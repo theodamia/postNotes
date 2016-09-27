@@ -1,3 +1,19 @@
+var mongoose = require('mongoose');
+
+module.exports = {
+  connectDB: function() {
+    mongoose.connect('mongodb://localhost:27017/notesDB');
+
+    var db = mongoose.connection;
+    db.on('error', function callback(err) {
+      console.log("Database connection failed. Error: " + err);
+    });
+    db.once('open', function callback() {
+      console.log("Database connection successful");
+    });
+  }
+};
+
 // import fs from 'fs';
 // import path from 'path';
 // import mongoose from 'mongoose';
@@ -27,13 +43,3 @@
 //     if (~file.indexOf('.js')) require(`${modelPath}/${file}`);
 //   });
 // };
-
-var mongoose = require('mongoose');
-
-var db = mongoose.connection;
-db.on('error', function callback(err) {
-  console.log("Database connection failed. Error: " + err);
-});
-db.once('open', function callback() {
-  console.log("Database connection successful.");
-});

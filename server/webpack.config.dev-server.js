@@ -1,112 +1,57 @@
-import Webpack from ('webpack');
-import Wepback-dev-server from ('webpack-dev-server');
-import webpackConfig from ('./../webpack.config.babel.js');
-import path from ('path');
-import mainPath from ('./app/main.js');
+var Webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var webpackConfig = require('./../webpack.config.js');
+var path = require('path');
+var mainPath = path.resolve(__dirname, '..', 'app', 'main.js');
 
-export default function () {
-    // First we fire up Webpack an pass in the configuration we created
-    var bundleStart = null;
-    var compiler = Webpack(webpackConfig);
+module.exports = function () {
 
-    // We give notice in the terminal when it starts bundling and
-    // set the time it started
-    compiler.plugin('compile', function() {
-      console.log('Bundling...');
-      bundleStart = Date.now();
-    });
+  // First we fire up Webpack an pass in the configuration we created
+  var bundleStart = null;
+  var compiler = Webpack(webpackConfig);
 
-    // We also give notice when it is done compiling, including the
-    // time it took.
-    compiler.plugin('done', function() {
-      console.log('Bundled in ' + (Date.now() - bundleStart) + 'ms!');
-    });
+  // We give notice in the terminal when it starts bundling and
+  // set the time it started
+  compiler.plugin('compile', function() {
+    console.log('Bundling...');
+    bundleStart = Date.now();
+  });
 
-    var bundler = new WebpackDevServer(compiler, {
+  // We also give notice when it is done compiling, including the
+  // time it took.
+  compiler.plugin('done', function() {
+    console.log('Bundled in ' + (Date.now() - bundleStart) + 'ms!');
+  });
 
-      // We need to tell Webpack to serve our bundled application
-      // from the build path. When proxying:
-      // http://localhost:3000/build -> http://localhost:8080/build
-      publicPath: '/build/',
+  var bundler = new WebpackDevServer(compiler, {
 
-      // Proxy the requests in /api/* (posts) of webpack-dev-server (:8080)
-      // in /api/* (posts) express-server (:3000)
-      proxy: {
-        '/api/*': {
-          target: 'http://localhost:3000'
-        }
-      },
-      // Configure hot replacement
-      hot: true,
-      // The rest is terminal configurations
-      quiet: true,
-      noInfo: false,
-      stats: {
-        colors: true
-      }
-    });
+    // We need to tell Webpack to serve our bundled application
+    // from the build path. When proxying:
+    // http://localhost:3000/build -> http://localhost:8080/build
+    publicPath: '/build/',
 
-    // We fire up the development server and give notice in the terminal
-    // that we are starting the initial bundle
-    bundler.listen(8080, 'localhost', function () {
-      console.log('Bundling project, please wait...');
-    });
+    // Proxy the requests in /api/* (posts) of webpack-dev-server (:8080)
+    // in /api/* (posts) express-server (:3000)
+    // proxy: {
+    //   '/api/*': {
+    //     target: 'http://localhost:3000',
+    //     changeOrigin: true
+    //   }
+    // },
+    // Configure hot replacement
+    hot: true,
+    // The rest is terminal configurations
+    quiet: true,
+    noInfo: false,
+    stats: {
+      colors: true
+    }
+  });
+
+  // We fire up the development server and give notice in the terminal
+  // that we are starting the initial bundle
+  bundler.listen(8080, 'localhost', function () {
+    console.log('Bundling project, please wait...');
+  });
 
 };
-
-// var Webpack = require('webpack');
-// var WebpackDevServer = require('webpack-dev-server');
-// var webpackConfig = require('./../webpack.config.babel.js');
-// var path = require('path');
-// var mainPath = path.resolve(__dirname, '..', 'app', 'main.js');
-//
-// module.exports = function () {
-//
-//   // First we fire up Webpack an pass in the configuration we created
-//   var bundleStart = null;
-//   var compiler = Webpack(webpackConfig);
-//
-//   // We give notice in the terminal when it starts bundling and
-//   // set the time it started
-//   compiler.plugin('compile', function() {
-//     console.log('Bundling...');
-//     bundleStart = Date.now();
-//   });
-//
-//   // We also give notice when it is done compiling, including the
-//   // time it took.
-//   compiler.plugin('done', function() {
-//     console.log('Bundled in ' + (Date.now() - bundleStart) + 'ms!');
-//   });
-//
-//   var bundler = new WebpackDevServer(compiler, {
-//
-//     // We need to tell Webpack to serve our bundled application
-//     // from the build path. When proxying:
-//     // http://localhost:3000/build -> http://localhost:8080/build
-//     publicPath: '/build/',
-//
-//     // Proxy the requests in /api/* (posts) of webpack-dev-server (:8080)
-//     // in /api/* (posts) express-server (:3000)
-//     proxy: {
-//       '/api/*': {
-//         target: 'http://localhost:3000'
-//       }
-//     },
-//     // Configure hot replacement
-//     hot: true,
-//     // The rest is terminal configurations
-//     quiet: true,
-//     noInfo: false,
-//     stats: {
-//       colors: true
-//     }
-//   });
-//
-//   // We fire up the development server and give notice in the terminal
-//   // that we are starting the initial bundle
-//   bundler.listen(8080, 'localhost', function () {
-//     console.log('Bundling project, please wait...');
-//   });
-//
-// };
