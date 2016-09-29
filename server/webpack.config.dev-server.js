@@ -30,14 +30,6 @@ module.exports = function () {
     // http://localhost:3000/build -> http://localhost:8080/build
     publicPath: '/build/',
 
-    // Proxy the requests in /api/* (posts) of webpack-dev-server (:8080)
-    // in /api/* (posts) express-server (:3000)
-    // proxy: {
-    //   '/api/*': {
-    //     target: 'http://localhost:3000',
-    //     changeOrigin: true
-    //   }
-    // },
     // Configure hot replacement
     hot: true,
     // The rest is terminal configurations

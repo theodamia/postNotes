@@ -2,8 +2,6 @@ var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
 var mongoose = require('mongoose');
-var postModel = require('./server/db/models/post.js');
-
 var bodyParser = require('body-parser');
 
 var proxy = httpProxy.createProxyServer({
@@ -34,35 +32,19 @@ app.use(function(req, res, next) {
     next();
 });
 
-var connection = require('./server/db/connection.js');
-var post = mongoose.model('Post');
-connection.connectDB();
-
 app.get('/public', function(req, res) {
   res.render('public/index');
 });
 
+var post = require('./server/db/controllers/posts.js');
 app.get('/api/posts', function(req, res) {
-  postModel.find({}).exec(function (err, posts) {
-    return res.json(posts);
-  });
+  post.all(req, res);
 });
 
 app.post('/api/posts', function(req, res) {
-  var mpla = new postModel(req.body.content);
-
-  mpla.save(function(err, post) {
-    if(err){
-      return handleError(err);
-      res.json(mpla);
-    } else {
-      res.json(mpla);
-      console.log('your form has been saved');
-    }
-  })
+  post.insert(req, res);
 });
 
-// We only want to run the workflow when not in production
 if (!PROD) {
   var bundle = require('./server/webpack.config.dev-server.js');
   bundle();

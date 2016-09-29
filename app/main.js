@@ -15,8 +15,8 @@ class PostBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      pollInterval: 2000
+      data: []
+      // pollInterval: 2000
     };
 
     this.loadPostsFromServer  = this.loadPostsFromServer.bind(this);
@@ -50,7 +50,6 @@ class PostBox extends React.Component {
       type: 'POST',
       data: post,
       success: function(data) {
-
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {

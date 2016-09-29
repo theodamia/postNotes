@@ -34,9 +34,12 @@ var config = {
 
     loaders: [
     {
-      test: [/\.js$/],
+      test: [/\.js$|\.jsx$/],
       loader: 'babel-loader',
-      exclude: [nodeModulesPath]
+      exclude: [nodeModulesPath],
+      query: {
+        presets: ['es2015','react']
+      }
     },
     {
       test: /\.css$/,
