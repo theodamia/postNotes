@@ -1,7 +1,6 @@
 var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
-var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 var proxy = httpProxy.createProxyServer({
@@ -43,6 +42,10 @@ app.get('/api/posts', function(req, res) {
 
 app.post('/api/posts', function(req, res) {
   post.insert(req, res);
+});
+
+app.delete('/api/posts', function(req, res) {
+  post.delete(req, res);
 });
 
 if (!PROD) {

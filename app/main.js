@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import PostForm from './components/form/form.js';
 import AddButton from './components/buttons/AddButton.js'
 import FavButton from './components/buttons/FavButton.js'
+import DeleteButton from './components/buttons/DeleteButton.js'
 
 import ListGroup from 'react-bootstrap/lib/ListGroup.js';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js';
@@ -16,7 +17,6 @@ class PostBox extends React.Component {
     super(props);
     this.state = {
       data: []
-      // pollInterval: 2000
     };
 
     this.loadPostsFromServer  = this.loadPostsFromServer.bind(this);
@@ -58,14 +58,12 @@ class PostBox extends React.Component {
       }.bind(this)
     });
   }
+  getInitialState() {
+    return {data: []};
+  }
   componentDidMount() {
     this.loadPostsFromServer();
     setInterval(this.loadPostsFromServer, this.state.pollInterval);
-  }
-  handleKeyDown(event) {
-    if (event.keyCode == 13) {
-      this.handleSubmit(e);
-    }
   }
   render() {
     return (
@@ -81,18 +79,6 @@ class PostBox extends React.Component {
     );
   }
 }
-
-// class FormBox extends React.Component {
-//   render() {
-//     return (
-//       <div className="col-lg-12">
-//         <div className="ta-center md-margintop md-marginbot">
-//           <PostForm />
-//         </div>
-//       </div>
-//     );
-//   }
-// }
 
 class FormBox extends React.Component {
   constructor(props) {
@@ -149,21 +135,42 @@ class FormBox extends React.Component {
 class PostList extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handerDelete = this.handerDelete.bind(this);
+  }
+  handerDelete(post) {
+    var newPosts = this.state.posts;
+    this.setState({data: newPosts});
+
+    $.ajax({
+      url: 'http://localhost:3000/api/posts',
+      dataType: 'application/json',
+      type: 'DELETE',
+      data: post,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        this.setState({data: posts});
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   }
   render() {
-    var postNodes = this.props.data.map(function(post) {
+    var postNodes = this.props.data.map((post) => {
       return (
         <Post key={post.id} >
           {post.text}
           <span>
             <FavButton />
+            <DeleteButton onClick={this.handerDelete} />
           </span>
         </Post>
       );
     });
     return (
-      <div className="col-lg-6">
-        <h3 className="sm-marginbot">Note List</h3>
+      <div className="postList col-lg-6">
+        <h3 className="sm-marginbot">Post List</h3>
         <ListGroup className="list">
           {postNodes}
         </ListGroup>
@@ -174,7 +181,7 @@ class PostList extends React.Component {
 
 class FavouriteList extends React.Component {
   render() {
-    var postNodes = this.props.data.map(function(post) {
+    var postNodes = this.props.data.map((post) => {
       return (
         <Post key={post.id}>
           {post.text}
@@ -185,7 +192,7 @@ class FavouriteList extends React.Component {
       <div className="col-lg-6">
         <h3 className="sm-marginbot">Favourites Notes</h3>
         <ListGroup>
-          {postNodes}
+          {favPostNodes}
         </ListGroup>
       </div>
     );
@@ -195,7 +202,7 @@ class FavouriteList extends React.Component {
 class Post extends React.Component {
   render() {
     return (
-      <ListGroupItem>{this.props.children} </ListGroupItem>
+      <ListGroupItem>{this.props.children}</ListGroupItem>
     );
   }
 }

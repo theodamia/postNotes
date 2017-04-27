@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 export default class AddButton extends React.Component {
     render(){
       return (
-        <Button bsStyle="warning" value="Favourite">Favourite</Button>
+        <Button className="btnList" bsStyle="warning" value="Favourite">Favourite</Button>
       );
     }
 }
