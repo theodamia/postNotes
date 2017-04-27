@@ -2,13 +2,11 @@ var Webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./../webpack.config.js');
 var path = require('path');
-var fs = require('fs');
 var mainPath = path.resolve(__dirname, '..', 'app', 'main.js');
 
 module.exports = function () {
 
-  // First we fire up Webpack an pass in the configuration we
-  // created
+  // First we fire up Webpack an pass in the configuration we created
   var bundleStart = null;
   var compiler = Webpack(webpackConfig);
 
@@ -20,7 +18,7 @@ module.exports = function () {
   });
 
   // We also give notice when it is done compiling, including the
-  // time it took. Nice to have
+  // time it took.
   compiler.plugin('done', function() {
     console.log('Bundled in ' + (Date.now() - bundleStart) + 'ms!');
   });
@@ -34,15 +32,14 @@ module.exports = function () {
 
     // Proxy the requests in /api/* (posts) of webpack-dev-server (:8080)
     // in /api/* (posts) express-server (:3000)
-    proxy: {
-      '/api/*': {
-        target: 'http://localhost:3000'
-      }
-    },
-
+    // proxy: {
+    //   '/api/*': {
+    //     target: 'http://localhost:3000',
+    //     changeOrigin: true
+    //   }
+    // },
     // Configure hot replacement
     hot: true,
-
     // The rest is terminal configurations
     quiet: true,
     noInfo: false,

@@ -14,7 +14,10 @@ import FormControl from 'react-bootstrap/lib/FormControl.js';
 class PostBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: []};
+    this.state = {
+      data: [],
+      pollInterval: 2000
+    };
 
     this.loadPostsFromServer  = this.loadPostsFromServer.bind(this);
     this.handlePostSubmit     = this.handlePostSubmit.bind(this);
@@ -22,9 +25,10 @@ class PostBox extends React.Component {
   }
   loadPostsFromServer() {
     $.ajax({
-      url: this.props.url,
+      url: 'http://localhost:3000/api/posts',
       dataType: 'json',
       cache: false,
+      type: 'GET',
       success: function(data) {
         this.setState({data: data});
       }.bind(this),
@@ -41,11 +45,12 @@ class PostBox extends React.Component {
     this.setState({data: newPosts});
 
     $.ajax({
-      url: this.props.url,
+      url: 'http://localhost:3000/api/posts',
       dataType: 'json',
       type: 'POST',
       data: post,
       success: function(data) {
+
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
@@ -56,7 +61,7 @@ class PostBox extends React.Component {
   }
   componentDidMount() {
     this.loadPostsFromServer();
-    setInterval(this.loadPostsFromServer, this.props.pollInterval);
+    setInterval(this.loadPostsFromServer, this.state.pollInterval);
   }
   handleKeyDown(event) {
     if (event.keyCode == 13) {
@@ -197,6 +202,6 @@ class Post extends React.Component {
 }
 
 ReactDOM.render(
-  <PostBox url="/api/posts" pollInterval={2000} />,
+  <PostBox />,
   document.getElementById('content')
 );
