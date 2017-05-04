@@ -6,9 +6,6 @@ export default class DeleteButton extends React.Component {
   constructor(props) {
     super(props);
   }
-  handleClick() {
-    this.props.handlerDelete();
-  }
   render() {
     return (
       <Button

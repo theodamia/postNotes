@@ -33,15 +33,14 @@ module.exports = {
   },
 
   delete: function(req, res) {
-    // const query = { id: req.body._id };
-    // Post.findOneAndRemove(query, (err) => {
-    //   if (err) {
-    //     console.log('Error on delete');
-    //     return res.status(500).send('We failed to delete for some reason');
-    //   }
-    //
-    //   return res.status(200).send('Removed Successfully');
-    // });
-    console.log("deleted");
+    const query = { id: req.body._id };
+    Post.findOneAndRemove(query, (err) => {
+      if (err) {
+        console.log('Error on delete');
+        return res.status(500).send('We failed to delete for some reason');
+      }
+
+      return res.status(200).send('Removed Successfully');
+    });
   }
 };

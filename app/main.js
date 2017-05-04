@@ -54,22 +54,22 @@ class PostBox extends React.Component {
       }.bind(this)
     });
   }
-  // handlerDelete(postId) {
-  //   console.log(postId);
-    // $.ajax({
-    //   url: 'http://localhost:3000/api/posts',
-    //   dataType: 'application/json',
-    //   type: 'DELETE',
-    //   data: postId,
-    //   success: function(data) {
-    //     console.log("success delete");
-    //     this.setState({ data: data });
-    //   }.bind(this),
-    //   error: function(xhr, status, err) {
-    //     console.error(this.props.url, status, err.toString());
-    //   }.bind(this)
-    // });
-  // }
+  handlerDelete(postId) {
+    console.log(postId);
+    $.ajax({
+      url: 'http://localhost:3000/api/posts',
+      dataType: 'json',
+      type: 'DELETE',
+      data: postId,
+      success: function(data) {
+        console.log("success delete");
+        this.setState({ data: data });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(xhr, status, err.toString());
+      }.bind(this)
+    });
+  }
   componentDidMount() {
     this.loadPostsFromServer();
   }
@@ -147,25 +147,6 @@ class PostList extends React.Component {
   constructor(props) {
     super(props);
   }
-  handleClick(postId) {
-    this.props.handlerDelete(postId);
-  }
-  handlerDelete(postId) {
-    console.log(postId);
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'application/json',
-      type: 'DELETE',
-      data: postId,
-      success: function(data) {
-        console.log("success delete");
-        this.setState({ data: data });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  }
   render() {
     var postNodes = this.props.data.map((post) => {
       return (
@@ -173,7 +154,7 @@ class PostList extends React.Component {
           {post.text}
           <span>
             <FavButton />
-            <DeleteButton handlerDelete={this.handlerDelete.bind(this, post._id)} />
+            <DeleteButton handlerDelete={() => {this.props.handlerDelete(post._id)}} />
           </span>
         </Post>
       );
