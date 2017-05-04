@@ -22,7 +22,6 @@ class PostBox extends React.Component {
     this.loadPostsFromServer  = this.loadPostsFromServer.bind(this);
     this.handlePostSubmit     = this.handlePostSubmit.bind(this);
     this.componentDidMount    = this.componentDidMount.bind(this);
-    this.handlerDelete        = this.handlerDelete.bind(this);
   }
   loadPostsFromServer() {
     $.ajax({
@@ -55,28 +54,24 @@ class PostBox extends React.Component {
       }.bind(this)
     });
   }
+  // handlerDelete(postId) {
+  //   console.log(postId);
+    // $.ajax({
+    //   url: 'http://localhost:3000/api/posts',
+    //   dataType: 'application/json',
+    //   type: 'DELETE',
+    //   data: postId,
+    //   success: function(data) {
+    //     console.log("success delete");
+    //     this.setState({ data: data });
+    //   }.bind(this),
+    //   error: function(xhr, status, err) {
+    //     console.error(this.props.url, status, err.toString());
+    //   }.bind(this)
+    // });
+  // }
   componentDidMount() {
     this.loadPostsFromServer();
-  }
-  handlerDelete(post) {
-    var newPosts = this.state.posts;
-    this.setState({data: newPosts});
-    console.log(data);
-
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'json',
-      type: 'DELETE',
-      data: post,
-      success: function(data) {
-        var newPosts = posts.concat([data]);
-        this.setState({data: newPosts});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        this.setState({data: posts});
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
   }
   render() {
     const props = {
@@ -88,7 +83,7 @@ class PostBox extends React.Component {
           <FormBox onPostSubmit={this.handlePostSubmit} />
         </div>
         <div className="row">
-          <PostList {...props} />
+          <PostList {...props} handlerDelete={this.handlerDelete} />
           <FavouriteList {...props} />
         </div>
       </div>
@@ -151,7 +146,25 @@ class FormBox extends React.Component {
 class PostList extends React.Component {
   constructor(props) {
     super(props);
-
+  }
+  handleClick(postId) {
+    this.props.handlerDelete(postId);
+  }
+  handlerDelete(postId) {
+    console.log(postId);
+    $.ajax({
+      url: 'http://localhost:3000/api/posts',
+      dataType: 'application/json',
+      type: 'DELETE',
+      data: postId,
+      success: function(data) {
+        console.log("success delete");
+        this.setState({ data: data });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   }
   render() {
     var postNodes = this.props.data.map((post) => {
@@ -160,7 +173,7 @@ class PostList extends React.Component {
           {post.text}
           <span>
             <FavButton />
-            <DeleteButton onClick={this.handlerDelete} />
+            <DeleteButton handlerDelete={this.handlerDelete.bind(this, post._id)} />
           </span>
         </Post>
       );
@@ -177,6 +190,9 @@ class PostList extends React.Component {
 }
 
 class FavouriteList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     var postNodes = this.props.data.map((post) => {
       return (
@@ -197,6 +213,9 @@ class FavouriteList extends React.Component {
 }
 
 class Post extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <ListGroupItem>{this.props.children}</ListGroupItem>

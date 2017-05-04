@@ -22,7 +22,7 @@ module.exports = {
     });
 
     post.save(function(err, post) {
-      if(err){
+      if(err) {
         return handleError(err);
         res.json(post);
       } else {

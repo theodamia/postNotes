@@ -28,6 +28,9 @@ app.use(function(req, res, next) {
 
     // Disable caching so we'll always get the latest comments.
     res.setHeader('Cache-Control', 'no-cache');
+
+    // Setting the allowing methods.
+    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     next();
 });
 
