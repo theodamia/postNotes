@@ -18,6 +18,7 @@ module.exports = {
 
   insert: function(req, res) {
     const post = new Post({
+      id: req.body._id,
       text: req.body.text
     });
 
@@ -27,20 +28,21 @@ module.exports = {
         res.json(post);
       } else {
         res.json(post);
-        console.log('your post has been saved');
+        console.log('Your post has been saved');
       }
     })
   },
 
   delete: function(req, res) {
-    const query = { id: req.body._id };
-    Post.findOneAndRemove(query, (err) => {
+    const query = { _id: req.body._id };
+    Post.findOneAndRemove(query, (err, posts) => {
       if (err) {
-        console.log('Error on delete');
         return res.status(500).send('We failed to delete for some reason');
+        res.json(posts);
       }
-
-      return res.status(200).send('Removed Successfully');
+      
+      console.log('Your post has been deleted');
+      res.json(posts);
     });
   }
 };

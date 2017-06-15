@@ -21,6 +21,7 @@ class PostBox extends React.Component {
 
     this.loadPostsFromServer  = this.loadPostsFromServer.bind(this);
     this.handlePostSubmit     = this.handlePostSubmit.bind(this);
+    this.handlerDelete        = this.handlerDelete.bind(this);
     this.componentDidMount    = this.componentDidMount.bind(this);
   }
   loadPostsFromServer() {
@@ -54,16 +55,15 @@ class PostBox extends React.Component {
       }.bind(this)
     });
   }
-  handlerDelete(postId) {
-    console.log(postId);
+  handlerDelete(post) {
     $.ajax({
       url: 'http://localhost:3000/api/posts',
       dataType: 'json',
+      cache: false,
       type: 'DELETE',
-      data: postId,
+      data: post,
       success: function(data) {
-        console.log("success delete");
-        this.setState({ data: data });
+        this.loadPostsFromServer();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -154,7 +154,7 @@ class PostList extends React.Component {
           {post.text}
           <span>
             <FavButton />
-            <DeleteButton handlerDelete={() => {this.props.handlerDelete(post._id)}} />
+            <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
           </span>
         </Post>
       );
