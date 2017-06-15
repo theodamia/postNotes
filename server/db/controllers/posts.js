@@ -40,7 +40,7 @@ module.exports = {
         return res.status(500).send('We failed to delete for some reason');
         res.json(posts);
       }
-      
+
       console.log('Your post has been deleted');
       res.json(posts);
     });
