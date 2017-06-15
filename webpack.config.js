@@ -11,17 +11,13 @@ var config = {
   // and line number
   devtool: 'eval',
   entry: [
-
-    // // For hot style updates
+    // For hot style updates
     'webpack/hot/dev-server',
-
-    // // The script refreshing the browser on none hot updates
+    // The script refreshing the browser on none hot updates
     'webpack-dev-server/client?http://localhost:8080',
-
     // Our application
     mainPath],
   output: {
-
     // We need to give Webpack a path. It does not actually need it,
     // because files are kept in memory in webpack-dev-server, but an
     // error will occur if nothing is specified. We use the buildPath
@@ -37,16 +33,14 @@ var config = {
   module: {
 
     loaders: [
-    // I highly recommend using the babel-loader as it gives you
-    // ES6/7 syntax and JSX transpiling out of the box
     {
-      test: [/\.js$/, /\.es6$/],
+      test: [/\.js$|\.jsx$/],
       loader: 'babel-loader',
       exclude: [nodeModulesPath],
-      query: { presets: ['react', 'es2015'] }
+      query: {
+        presets: ['es2015','react']
+      }
     },
-    // Let us also add the style-loader and css-loader, which you can
-    // expand with less-loader etc.
     {
       test: /\.css$/,
       loader: 'style-loader!css-loader'

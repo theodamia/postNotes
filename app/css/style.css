@@ -8,6 +8,12 @@ ul {
   padding: 0;
 }
 
+textarea {
+  resize: none;
+  overflow: hidden;
+  width: 500px !important;
+}
+
 .center {
   margin-left: auto;
   margin-right: auto;
@@ -31,13 +37,26 @@ ul {
 
 .ta-left { text-align: left; }
 
-textarea {
-  resize: none;
-  overflow: hidden;
-  width: 500px !important;
-}
+.ta-right { text-align: right };
 
 #content {
   position: relative;
   z-index: 1000;
+}
+
+.list span {
+  display: flex;
+  justify-content: space-between;
+}
+
+#btnDelete {
+  margin-left: 10px;
+}
+
+.btnList {
+  /*display: none;*/
+}
+
+.list span:hover .btnList {
+  display: block;
 }

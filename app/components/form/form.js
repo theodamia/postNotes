@@ -5,11 +5,13 @@ import FormGroup from 'react-bootstrap/lib/FormGroup.js';
 import FormControl from 'react-bootstrap/lib/FormControl.js';
 import AddButton from '../buttons/AddButton.js';
 
-export default class TodoForm extends React.Component {
+export default class PostForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {text: ''};
+
     this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleSubmit     = this.handleSubmit.bind(this);
   }
   handleTextChange(e) {
     this.setState({text: e.target.value});

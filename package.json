@@ -5,16 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node express-server",
+    "start": "node express",
     "start-dev": "webpack-dev-server"
   },
   "author": "teo",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.11.4",
+    "babel-eslint": "^7.0.0",
     "babel-loader": "^6.2.4",
+    "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
+    "babel-register": "^6.14.0",
     "css-loader": "^0.23.1",
     "http-proxy": "^1.14.0",
     "jshint": "^2.9.2",
@@ -22,7 +25,9 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "babel": "^6.5.2",
     "body-parser": "^1.15.2",
+    "bootstrap": "^3.3.7",
     "express": "^4.14.0",
     "mongodb": "^2.2.5",
     "react": "^15.3.0",
