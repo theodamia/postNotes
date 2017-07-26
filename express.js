@@ -47,6 +47,10 @@ app.post('/api/posts', function(req, res) {
   post.insert(req, res);
 });
 
+app.post('/api/posts/:done', function(req,res) {
+  post.done(req, res);
+});
+
 app.delete('/api/posts', function(req, res) {
   post.delete(req, res);
 });

@@ -19,7 +19,8 @@ module.exports = {
   insert: function(req, res) {
     const post = new Post({
       id: req.body._id,
-      text: req.body.text
+      text: req.body.text,
+      done: false
     });
 
     post.save(function(err, post) {
@@ -43,6 +44,17 @@ module.exports = {
 
       console.log('Your post has been deleted');
       res.json(posts);
+    });
+  },
+
+  done: function(req, res) {
+    const query = { _id: req.body._id };
+    Post.findById(query, (err, post) => {
+      post.done = true;
+      post.save(function (err, post) {
+        if (err) return handleError(err);
+          res.json(post);
+      });
     });
   }
 };

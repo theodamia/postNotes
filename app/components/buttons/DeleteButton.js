@@ -8,14 +8,19 @@ export default class DeleteButton extends React.Component {
   }
   render() {
     return (
+      // <Button
+      //   id="btnDelete"
+      //   className="btn-list"
+      //   bsStyle="danger"
+      //   value="Delete"
+      //   onClick={this.props.handlerDelete}>
+      //     Delete
+      // </Button>
       <Button
         id="btnDelete"
-        className="btnList"
-        bsStyle="danger"
         value="Delete"
-        onClick={this.props.handlerDelete}>
-          Delete
-      </Button>
+        title="Delete"
+        onClick={this.props.handlerDelete}/>
     );
   }
 }
