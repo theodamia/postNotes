@@ -4,8 +4,9 @@ import ReactDOM from 'react-dom';
 
 import PostForm from './components/form/form.js';
 import AddButton from './components/buttons/AddButton.js'
-import FavButton from './components/buttons/DoneButton.js'
+import DoneButton from './components/buttons/DoneButton.js'
 import DeleteButton from './components/buttons/DeleteButton.js'
+import UndoneButton from './components/buttons/UndoneButton.js'
 
 import ListGroup from 'react-bootstrap/lib/ListGroup.js';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js';
@@ -72,7 +73,7 @@ class PostBox extends React.Component {
   }
   handleDoneChange(post) {
     $.ajax({
-      url: 'http://localhost:3000/api/posts/:favourite',
+      url: 'http://localhost:3000/api/posts/:done',
       dataType: 'json',
       type: 'POST',
       data: post,
@@ -98,7 +99,7 @@ class PostBox extends React.Component {
         </div>
         <div className="row">
           <PostList {...props} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange} />
-          <FavouriteList {...props} />
+          <FavouriteList {...props} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange}/>
         </div>
       </div>
     );
@@ -165,10 +166,10 @@ class PostList extends React.Component {
     var postNodes = this.props.data.map((post) => {
       if(post.done == false) {
         return (
-          <Post key={post._id} >
+          <Post key={post._id}>
             {post.text}
             <span>
-              <FavButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
+              <DoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
               <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
             </span>
           </Post>
@@ -196,6 +197,10 @@ class FavouriteList extends React.Component {
         return (
           <Post key={post._id}>
             {post.text}
+            <span>
+              <UndoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
+              <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
+            </span>
           </Post>
         )
       }
@@ -203,7 +208,7 @@ class FavouriteList extends React.Component {
     return (
       <div className="col-lg-6">
         <h3 className="sm-marginbot">Done</h3>
-        <ListGroup>
+        <ListGroup className="list">
           {postNodes}
         </ListGroup>
       </div>

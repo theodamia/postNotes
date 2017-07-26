@@ -50,7 +50,11 @@ module.exports = {
   done: function(req, res) {
     const query = { _id: req.body._id };
     Post.findById(query, (err, post) => {
-      post.done = true;
+      if(post.done) {
+        post.done = false;
+      } else {
+        post.done = true;
+      }
       post.save(function (err, post) {
         if (err) return handleError(err);
           res.json(post);
