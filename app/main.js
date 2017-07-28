@@ -4,8 +4,9 @@ import ReactDOM from 'react-dom';
 
 import PostForm from './components/form/form.js';
 import AddButton from './components/buttons/AddButton.js'
-import FavButton from './components/buttons/FavButton.js'
+import DoneButton from './components/buttons/DoneButton.js'
 import DeleteButton from './components/buttons/DeleteButton.js'
+import UndoneButton from './components/buttons/UndoneButton.js'
 
 import ListGroup from 'react-bootstrap/lib/ListGroup.js';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js';
@@ -23,6 +24,7 @@ class PostBox extends React.Component {
     this.handlePostSubmit     = this.handlePostSubmit.bind(this);
     this.handlerDelete        = this.handlerDelete.bind(this);
     this.componentDidMount    = this.componentDidMount.bind(this);
+    this.handleDoneChange     = this.handleDoneChange.bind(this);
   }
   loadPostsFromServer() {
     $.ajax({
@@ -59,8 +61,21 @@ class PostBox extends React.Component {
     $.ajax({
       url: 'http://localhost:3000/api/posts',
       dataType: 'json',
-      cache: false,
       type: 'DELETE',
+      data: post,
+      success: function(data) {
+        this.loadPostsFromServer();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(xhr, status, err.toString());
+      }.bind(this)
+    });
+  }
+  handleDoneChange(post) {
+    $.ajax({
+      url: 'http://localhost:3000/api/posts/:done',
+      dataType: 'json',
+      type: 'POST',
       data: post,
       success: function(data) {
         this.loadPostsFromServer();
@@ -83,8 +98,8 @@ class PostBox extends React.Component {
           <FormBox onPostSubmit={this.handlePostSubmit} />
         </div>
         <div className="row">
-          <PostList {...props} handlerDelete={this.handlerDelete} />
-          <FavouriteList {...props} />
+          <PostList {...props} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange} />
+          <FavouriteList {...props} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange}/>
         </div>
       </div>
     );
@@ -149,19 +164,21 @@ class PostList extends React.Component {
   }
   render() {
     var postNodes = this.props.data.map((post) => {
-      return (
-        <Post key={post._id} >
-          {post.text}
-          <span>
-            <FavButton />
-            <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
-          </span>
-        </Post>
-      );
+      if(post.done == false) {
+        return (
+          <Post key={post._id}>
+            {post.text}
+            <span>
+              <DoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
+              <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
+            </span>
+          </Post>
+        )
+      };
     });
     return (
-      <div className="postList col-lg-6">
-        <h3 className="sm-marginbot">Post List</h3>
+      <div className="post-list col-lg-6">
+        <h3 className="sm-marginbot">Notes List</h3>
         <ListGroup className="list">
           {postNodes}
         </ListGroup>
@@ -176,16 +193,22 @@ class FavouriteList extends React.Component {
   }
   render() {
     var postNodes = this.props.data.map((post) => {
-      return (
-        <Post key={post._id}>
-          {post.text}
-        </Post>
-      );
+      if(post.done == true) {
+        return (
+          <Post key={post._id}>
+            {post.text}
+            <span>
+              <UndoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
+              <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
+            </span>
+          </Post>
+        )
+      }
     });
     return (
       <div className="col-lg-6">
-        <h3 className="sm-marginbot">Favourites Notes</h3>
-        <ListGroup>
+        <h3 className="sm-marginbot">Done</h3>
+        <ListGroup className="list">
           {postNodes}
         </ListGroup>
       </div>

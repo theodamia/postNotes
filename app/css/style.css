@@ -14,6 +14,10 @@ textarea {
   width: 500px !important;
 }
 
+body {
+  background-color: #eee;
+}
+
 .center {
   margin-left: auto;
   margin-right: auto;
@@ -49,14 +53,35 @@ textarea {
   justify-content: space-between;
 }
 
+.list span:hover .btn-list {
+  display: block;
+  height: 100%;
+}
+
 #btnDelete {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url(/app/assets/delete.png) no-repeat;
+  background-size: 100%;
+  background-size: 40px auto;
   margin-left: 10px;
 }
 
-.btnList {
-  /*display: none;*/
+#btnDone {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url(/app/assets/done.png) no-repeat;
+  background-size: 100%;
+  background-size: 40px auto;
 }
 
-.list span:hover .btnList {
-  display: block;
+#btnUndone {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url(/app/assets/undone.png) no-repeat;
+  background-size: 100%;
+  background-size: 40px auto;
 }
