@@ -47,9 +47,14 @@ app.post('/api/posts', function(req, res) {
   post.insert(req, res);
 });
 
-app.post('/api/posts/:done', function(req,res) {
+app.post('/api/posts/:id/done', function(req, res) {
   post.done(req, res);
 });
+
+app.post('/api/posts/:id/text', function(req, res) {
+  post.textUpdate(req, res);
+});
+
 
 app.delete('/api/posts', function(req, res) {
   post.delete(req, res);

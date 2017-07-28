@@ -1,4 +1,5 @@
-import './css/style.css';
+import './style/css/style.css';
+import './style/styleJS.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -25,6 +26,7 @@ class PostBox extends React.Component {
     this.handlerDelete        = this.handlerDelete.bind(this);
     this.componentDidMount    = this.componentDidMount.bind(this);
     this.handleDoneChange     = this.handleDoneChange.bind(this);
+    this.handleTextUpdate     = this.handleTextUpdate.bind(this);
   }
   loadPostsFromServer() {
     $.ajax({
@@ -73,7 +75,21 @@ class PostBox extends React.Component {
   }
   handleDoneChange(post) {
     $.ajax({
-      url: 'http://localhost:3000/api/posts/:done',
+      url: 'http://localhost:3000/api/posts/:id/done',
+      dataType: 'json',
+      type: 'POST',
+      data: post,
+      success: function(data) {
+        this.loadPostsFromServer();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(xhr, status, err.toString());
+      }.bind(this)
+    });
+  }
+  handleTextUpdate(post) {
+    $.ajax({
+      url: 'http://localhost:3000/api/posts/:id/text',
       dataType: 'json',
       type: 'POST',
       data: post,
@@ -98,7 +114,7 @@ class PostBox extends React.Component {
           <FormBox onPostSubmit={this.handlePostSubmit} />
         </div>
         <div className="row">
-          <PostList {...props} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange} />
+          <PostList {...props} onTextUpdate={this.handleTextUpdate} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange} />
           <FavouriteList {...props} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange}/>
         </div>
       </div>
@@ -161,13 +177,31 @@ class FormBox extends React.Component {
 class PostList extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleOnBlur = this.handleOnBlur.bind(this);
+  }
+  handleOnBlur(e) {
+    e.preventDefault();
+
+    var text = e.target.value.trim();
+    var _id = e.target.getAttribute('data-id');
+
+    if(!text) {
+      return;
+    }
+
+    this.props.onTextUpdate({
+      text: text,
+      _id: _id
+    });
   }
   render() {
     var postNodes = this.props.data.map((post) => {
       if(post.done == false) {
         return (
           <Post key={post._id}>
-            {post.text}
+            <input data-id={post._id} className="npt-text" type="text" readOnly="true" defaultValue={post.text}
+              onBlur={this.handleOnBlur} />
             <span>
               <DoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
               <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />

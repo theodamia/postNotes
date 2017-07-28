@@ -5,16 +5,6 @@ var connection = require('../connection.js');
 connection.connect();
 
 module.exports = {
-  all: function(req, res) {
-    Post.find({}).exec((err, posts) => {
-      if (err) {
-        console.log('Error in first query');
-        return res.status(500).send('Something went wrong getting the data');
-      }
-
-      return res.json(posts);
-    });
-  },
 
   insert: function(req, res) {
     const post = new Post({
@@ -34,16 +24,27 @@ module.exports = {
     })
   },
 
+  all: function(req, res) {
+    Post.find({}).exec((err, post) => {
+      if (err) {
+        console.log('Error in first query');
+        return res.status(500).send('Something went wrong getting the data');
+      }
+
+      return res.json(post);
+    });
+  },
+
   delete: function(req, res) {
     const query = { _id: req.body._id };
-    Post.findOneAndRemove(query, (err, posts) => {
+    Post.findOneAndRemove(query, (err, post) => {
       if (err) {
         return res.status(500).send('We failed to delete for some reason');
-        res.json(posts);
+        res.json(post);
       }
 
       console.log('Your post has been deleted');
-      res.json(posts);
+      res.json(post);
     });
   },
 
@@ -59,6 +60,15 @@ module.exports = {
         if (err) return handleError(err);
           res.json(post);
       });
+    });
+  },
+
+  textUpdate: function(req, res) {
+    const query = { _id: req.body._id };
+    Post.findOneAndUpdate(query, {"$set": { "text":req.body.text}}, function(err, post){
+        if (err) return res.send(500, { error: err });
+        res.json(post);
+        console.log("Text updated");
     });
   }
 };
