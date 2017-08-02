@@ -6,15 +6,8 @@ export default class DoneButton extends React.Component {
   constructor(props) {
     super(props);
   }
-  render(){
+  render() {
     return (
-      // <Button
-      //   className="btn-list"
-      //   bsStyle="success"
-      //   value="Done"
-      //   onClick={this.props.handleDoneChange}>
-      //     Done
-      // </Button>
       <Button
         id="btnDone"
         value="Done"

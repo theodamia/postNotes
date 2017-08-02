@@ -60,6 +60,8 @@ body {
 
 .npt-text {
   border: 0;
+  width: 100%;
+  margin-right: 10px;
 }
 
 #btnDelete {

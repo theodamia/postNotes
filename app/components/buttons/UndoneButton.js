@@ -6,7 +6,7 @@ export default class UndoneButton extends React.Component {
   constructor(props) {
     super(props);
   }
-  render(){
+  render() {
     return (
       <Button
         id="btnUndone"

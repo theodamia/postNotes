@@ -65,7 +65,7 @@ module.exports = {
 
   textUpdate: function(req, res) {
     const query = { _id: req.body._id };
-    Post.findOneAndUpdate(query, {"$set": { "text":req.body.text}}, function(err, post){
+    Post.findOneAndUpdate(query, {"$set": { "text":req.body.text}}, (err, post) => {
         if (err) return res.send(500, { error: err });
         res.json(post);
         console.log("Text updated");
