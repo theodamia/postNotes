@@ -1,21 +1,18 @@
-import './style/css/style.css';
-import './style/styleJS.js';
+import '../style/styleJS.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {ReactRouter, Router, Route, Switch } from 'react-router';
 
-import FormBox from './components/form/FormBox.js';
+import FormBox from '../components/form/FormBox.js';
 
-import AddButton from './components/buttons/AddButton.js';
-import DoneButton from './components/buttons/DoneButton.js';
-import DeleteButton from './components/buttons/DeleteButton.js';
-import UndoneButton from './components/buttons/UndoneButton.js';
+import DoneButton from '../components/buttons/DoneButton.js';
+import DeleteButton from '../components/buttons/DeleteButton.js';
+import UndoneButton from '../components/buttons/UndoneButton.js';
 
 import ListGroup from 'react-bootstrap/lib/ListGroup.js';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js';
-import FormGroup from 'react-bootstrap/lib/FormGroup.js';
-import FormControl from 'react-bootstrap/lib/FormControl.js';
 
-class PostBox extends React.Component {
+export default class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -110,7 +107,7 @@ class PostBox extends React.Component {
       data: this.state.data
     }
     return (
-      <div className="container">
+      <div className="col-lg-12">
         <div className="row">
           <FormBox onPostSubmit={this.handlePostSubmit} />
         </div>
@@ -127,7 +124,7 @@ class PostList extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleOnBlur = this.handleOnBlur.bind(this);
+    this.handleOnBlur  = this.handleOnBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   handleOnBlur(e) {
@@ -180,7 +177,7 @@ class FavouriteList extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleOnBlur = this.handleOnBlur.bind(this);
+    this.handleOnBlur  = this.handleOnBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   handleOnBlur(e) {
@@ -239,8 +236,3 @@ class Post extends React.Component {
     );
   }
 }
-
-ReactDOM.render(
-  <PostBox />,
-  document.getElementById('content')
-);

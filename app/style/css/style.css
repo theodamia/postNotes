@@ -91,3 +91,23 @@ body {
   background-size: 100%;
   background-size: 40px auto;
 }
+
+#nav-bar {
+  background-color: #eee;
+  border: none;
+}
+
+#nav-bar a {
+  color: #000;
+}
+
+#nav-bar .navbar-brand {
+  font-size: 29px;
+  color: #337ab7;
+  font-weight: bold;
+}
+
+.navbar-nav>li>a {
+  line-height: 27px;
+  font-size: 19px;
+}
