@@ -1,16 +1,15 @@
-import '../style/styleJS.js';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {ReactRouter, Router, Route, Switch } from 'react-router';
+import '../style/styleJS.js'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import FormBox from '../components/form/FormBox.js';
+import FormBox from '../components/form/FormBox.js'
 
-import DoneButton from '../components/buttons/DoneButton.js';
-import DeleteButton from '../components/buttons/DeleteButton.js';
-import UndoneButton from '../components/buttons/UndoneButton.js';
+import DoneButton from '../components/buttons/DoneButton.js'
+import DeleteButton from '../components/buttons/DeleteButton.js'
+import UndoneButton from '../components/buttons/UndoneButton.js'
 
-import ListGroup from 'react-bootstrap/lib/ListGroup.js';
-import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js';
+import ListGroup from 'react-bootstrap/lib/ListGroup.js'
+import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js'
 
 export default class Main extends React.Component {
   constructor(props) {

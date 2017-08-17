@@ -1,9 +1,12 @@
 import './style/css/style.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import { Route, BrowserRouter as Router } from 'react-router-dom'
-import { Router, IndexRoute } from 'react-router';
-import createBrowserHistory from 'history/createBrowserHistory'
+
+// import { Router, browserHistory } from 'react-router'
+// import createBrowserHistory from 'history/createBrowserHistory';
+// const history = createBrowserHistory();
+
+import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 
 import NavBar from 'react-bootstrap/lib/Navbar'
 import Nav from 'react-bootstrap/lib/Nav'
@@ -11,8 +14,9 @@ import NavItem from 'react-bootstrap/lib/NavItem'
 
 import Main from './pages/main'
 import routes from './routes'
+import Login from './pages/login'
 
-class App extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -23,8 +27,7 @@ class App extends React.Component {
           <Navigation />
         </header>
         <main className="row">
-          <Main />
-          // {this.props.children}
+          {this.props.children}
         </main>
       </div>
     );
@@ -45,7 +48,7 @@ class Navigation extends React.Component {
             </NavBar.Brand>
           </NavBar.Header>
           <Nav>
-            <NavItem href="/login">Log in</NavItem>
+            <NavItem><Link to="/Login">Login</Link></NavItem>
             <NavItem href="/about">About</NavItem>
           </Nav>
         </NavBar>
@@ -54,10 +57,21 @@ class Navigation extends React.Component {
   }
 }
 
-const history = createBrowserHistory();
-ReactDOM.render (
-  // <Router routes={routes} history={history} />,
-  //  document.getElementById('content')
-  <App />,
-  document.getElementById('content')
-);
+// ReactDOM.render (
+//   // <Router routes={Routes} history={history} />,
+//   //  document.getElementById('content')
+//   <Router history={hashHistory}>
+//     <Route path="/" component={App}/>
+//   </Router>,
+//   document.getElementById('content')
+//   //  <App />,
+//   //  document.getElementById('content')
+// );
+ReactDOM.render((
+<Router history={hashHistory}>
+    <Route path="/" component={App}>
+     <IndexRoute component={Main} />
+    <Route path="/Login" component={Login}/>
+    </Route>
+  </Router>
+), document.getElementById('content'))
