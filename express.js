@@ -34,6 +34,12 @@ app.use(function(req, res, next) {
     next();
 });
 
+// handle every other route with index.html, which will contain
+// a script tag to your application's JavaScript file(s).
+// app.get('*', function (req, res){
+//   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+// })
+
 app.get('/public', function(req, res) {
   res.render('public/index');
 });
@@ -47,9 +53,14 @@ app.post('/api/posts', function(req, res) {
   post.insert(req, res);
 });
 
-app.post('/api/posts/:done', function(req,res) {
+app.post('/api/posts/:id/done', function(req, res) {
   post.done(req, res);
 });
+
+app.post('/api/posts/:id/text', function(req, res) {
+  post.textUpdate(req, res);
+});
+
 
 app.delete('/api/posts', function(req, res) {
   post.delete(req, res);

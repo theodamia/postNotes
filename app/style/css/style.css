@@ -58,6 +58,12 @@ body {
   height: 100%;
 }
 
+.npt-text {
+  border: 0;
+  width: 100%;
+  margin-right: 10px;
+}
+
 #btnDelete {
   width: 40px;
   height: 40px;
@@ -84,4 +90,24 @@ body {
   background: url(/app/assets/undone.png) no-repeat;
   background-size: 100%;
   background-size: 40px auto;
+}
+
+#nav-bar {
+  background-color: #eee;
+  border: none;
+}
+
+#nav-bar a {
+  color: #000;
+}
+
+#nav-bar .navbar-brand {
+  font-size: 29px;
+  color: #337ab7;
+  font-weight: bold;
+}
+
+.navbar-nav>li>a {
+  line-height: 27px;
+  font-size: 19px;
 }
