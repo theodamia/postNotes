@@ -5,7 +5,7 @@ import { Router, hashHistory } from 'react-router'
 import {FormGroup, FormControl } from 'react-bootstrap'
 import RegisterBtn from '../components/buttons/RegisterButton.js'
 
-export default class Main extends React.Component {
+export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +13,8 @@ export default class Main extends React.Component {
       email: '',
       password: '',
       isRegister: false,
-      isLogin: false
+      isLogin: false,
+      textClicked: true
     };
 
     this.handleEmailChange    = this.handleEmailChange.bind(this);
@@ -70,12 +71,16 @@ export default class Main extends React.Component {
     });
   }
   render() {
+    const propTextClicked = {
+      textClicked: this.state.textClicked
+    }
     return (
       <div className="col-lg-12">
         <div className="login-box">
-          <h1>Register with Email</h1>
+          <h1>{this.state.textClicked ? 'Register with Email' : 'Login with Email'}</h1>
           <div className="login-text">
-            Already have an account? <a>Login now.</a>
+            {this.state.textClicked ? 'Already have an account? ' : 'You need an account? ' }
+            <a onClick={() => this.setState({textClicked: !this.state.textClicked})}>{this.state.textClicked ? 'Login now.' : 'Register.'}</a>
           </div>
           <div className="login-form">
             <form onSubmit={this.handleSubmit}>
@@ -93,7 +98,7 @@ export default class Main extends React.Component {
                   value={this.state.password}
                   onChange={this.handlePasswordChange}/>
                 <div>
-                  <RegisterBtn />
+                  <RegisterBtn {...propTextClicked} />
                 </div>
               </FormGroup>
             </form>
