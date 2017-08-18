@@ -16,6 +16,7 @@ var publicPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicPath));
 
 var POSTS_FILE = path.join(__dirname, 'posts.json');
+var USERS_FILE = path.join(__dirname, 'users.json');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -34,16 +35,11 @@ app.use(function(req, res, next) {
     next();
 });
 
-// handle every other route with index.html, which will contain
-// a script tag to your application's JavaScript file(s).
-// app.get('*', function (req, res){
-//   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-// })
-
 app.get('/public', function(req, res) {
   res.render('public/index');
 });
 
+/*Posts*/
 var post = require('./server/db/controllers/posts.js');
 app.get('/api/posts', function(req, res) {
   post.all(req, res);
@@ -61,9 +57,14 @@ app.post('/api/posts/:id/text', function(req, res) {
   post.textUpdate(req, res);
 });
 
-
 app.delete('/api/posts', function(req, res) {
   post.delete(req, res);
+});
+
+/*Users*/
+var user = require('./server/db/controllers/users.js');
+app.post('/api/users', function(req, res) {
+  user.insert(req, res);
 });
 
 if (!PROD) {

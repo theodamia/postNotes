@@ -7,7 +7,7 @@ import Login from './pages/login'
 
 export default (
   <Route path="/" component={App}>
-   <IndexRoute component={Main} />
-   <Route path="/Login" component={Login} />
- </Route>
+    <IndexRoute component={Main} />
+    <Route path="/Login" component={Login}/>
+  </Route>
 );

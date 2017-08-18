@@ -1,19 +1,14 @@
 import './style/css/style.css'
+import './style/styleJS.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
-
-// import { Router, browserHistory } from 'react-router'
-// import createBrowserHistory from 'history/createBrowserHistory';
-// const history = createBrowserHistory();
-
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 
+import { Nav, NavItem } from 'react-bootstrap'
 import NavBar from 'react-bootstrap/lib/Navbar'
-import Nav from 'react-bootstrap/lib/Nav'
-import NavItem from 'react-bootstrap/lib/NavItem'
 
 import Main from './pages/main'
-import routes from './routes'
+// import routes from './routes'
 import Login from './pages/login'
 
 export default class App extends React.Component {
@@ -57,21 +52,11 @@ class Navigation extends React.Component {
   }
 }
 
-// ReactDOM.render (
-//   // <Router routes={Routes} history={history} />,
-//   //  document.getElementById('content')
-//   <Router history={hashHistory}>
-//     <Route path="/" component={App}/>
-//   </Router>,
-//   document.getElementById('content')
-//   //  <App />,
-//   //  document.getElementById('content')
-// );
 ReactDOM.render((
-<Router history={hashHistory}>
+  <Router history={hashHistory}>
     <Route path="/" component={App}>
-     <IndexRoute component={Main} />
-    <Route path="/Login" component={Login}/>
+      <IndexRoute component={Main} />
+      <Route path="/Login" component={Login}/>
     </Route>
   </Router>
 ), document.getElementById('content'))

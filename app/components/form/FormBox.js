@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import FormGroup from 'react-bootstrap/lib/FormGroup.js';
-import FormControl from 'react-bootstrap/lib/FormControl.js';
+import {FormGroup, FormControl } from 'react-bootstrap'
 import AddButton from '../buttons/AddButton.js';
 
 export default class FormBox extends React.Component {
