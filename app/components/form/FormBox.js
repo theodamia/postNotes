@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {FormGroup, FormControl } from 'react-bootstrap'
-import AddButton from '../buttons/AddButton.js';
+import CButton from '../buttons/CButton'
 
 export default class FormBox extends React.Component {
   constructor(props) {
@@ -46,7 +46,7 @@ export default class FormBox extends React.Component {
                 onKeyDown={this.handleKeyDown}
               />
               <div className="sm-margintop">
-                <AddButton />
+                <CButton bsStyle="primary" type="submit" value="Post" text="Add Note" />
               </div>
             </FormGroup>
           </form>

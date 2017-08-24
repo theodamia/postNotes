@@ -3,18 +3,18 @@ import ReactDOM from 'react-dom'
 import { Router, hashHistory } from 'react-router'
 
 import {FormGroup, FormControl } from 'react-bootstrap'
-import RegisterBtn from '../components/buttons/RegisterButton.js'
+import CButton from '../components/buttons/CButton'
 
-export default class Login extends React.Component {
+export default class RegisterOrLogin extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       data: [],
       email: '',
       password: '',
       isRegister: false,
-      isLogin: false,
-      textClicked: true
+      isLogin: false
     };
 
     this.handleEmailChange    = this.handleEmailChange.bind(this);
@@ -71,9 +71,6 @@ export default class Login extends React.Component {
     });
   }
   render() {
-    const propTextClicked = {
-      textClicked: this.state.textClicked
-    }
     return (
       <div className="col-lg-12">
         <div className="login-box">
@@ -98,7 +95,7 @@ export default class Login extends React.Component {
                   value={this.state.password}
                   onChange={this.handlePasswordChange}/>
                 <div>
-                  <RegisterBtn {...propTextClicked} />
+                  <CButton bsStyle="success" id="btn-register" type="submit" text={this.state.textClicked ? 'Register' : 'Login'} />
                 </div>
               </FormGroup>
             </form>

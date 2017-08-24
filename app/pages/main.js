@@ -2,17 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import FormBox from '../components/form/FormBox.js'
-
-import DoneButton from '../components/buttons/DoneButton.js'
-import DeleteButton from '../components/buttons/DeleteButton.js'
-import UndoneButton from '../components/buttons/UndoneButton.js'
-
+import CButton from '../components/buttons/CButton.js'
 import ListGroup from 'react-bootstrap/lib/ListGroup.js'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js'
 
 export default class Main extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       data: []
     };
@@ -77,6 +74,7 @@ export default class Main extends React.Component {
       data: post,
       success: function(data) {
         this.loadPostsFromServer();
+        console.log("mpla");
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -150,11 +148,11 @@ class PostList extends React.Component {
       if(post.done == false) {
         return (
           <Post key={post._id}>
-            <input data-id={post._id} className="npt-text" type="text" readOnly="true" defaultValue={post.text}
-              onBlur={this.handleOnBlur} />
+            <input data-id={post._id} className="npt-text" type="text" readOnly="true"
+             defaultValue={post.text} onBlur={this.handleOnBlur} />
             <span>
-              <DoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
-              <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
+              <CButton id="btnDone" value="Done" title="Done" onClick={() => {this.props.handleDoneChange(post)}}/>
+              <CButton id="btnDelete" value="Delete" title="Delete" onClick={() => {this.props.handlerDelete(post)}}/>
             </span>
           </Post>
         )
@@ -206,8 +204,8 @@ class FavouriteList extends React.Component {
             <input data-id={post._id} className="npt-text" type="text" readOnly="true" defaultValue={post.text}
               onBlur={this.handleOnBlur} />
             <span>
-              <UndoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
-              <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
+              <CButton id="btnUndone" value="Undone" title="Undone" onClick={() => {this.props.handleDoneChange(post)}}/>
+              <CButton id="btnDelete" value="Delete" title="Delete" onClick={() => {this.props.handlerDelete(post)}}/>
             </span>
           </Post>
         )
