@@ -13,7 +13,7 @@ module.exports = {
       done: false
     });
 
-    post.save(function(err, post) {
+    post.save((err, post) => {
       if(err) {
         return handleError(err);
         res.json(post);

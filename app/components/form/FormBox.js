@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {FormGroup, FormControl } from 'react-bootstrap'
-import CButton from '../buttons/CButton'
+import CButton from '../button/CButton'
 
 export default class FormBox extends React.Component {
   constructor(props) {

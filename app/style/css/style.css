@@ -165,3 +165,8 @@ body {
   height: 45px;
   font-size: 18px;
 }
+
+.alert-text {
+  color: red;
+  font-size: 15px;
+}

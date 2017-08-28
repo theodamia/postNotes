@@ -39,7 +39,9 @@ app.get('/public', function(req, res) {
   res.render('public/index');
 });
 
-/*Posts*/
+/**
+* Post requests
+*/
 var post = require('./server/db/controllers/posts.js');
 app.get('/api/posts', function(req, res) {
   post.all(req, res);
@@ -61,10 +63,16 @@ app.delete('/api/posts', function(req, res) {
   post.delete(req, res);
 });
 
-/*Users*/
+/**
+* User requests
+*/
 var user = require('./server/db/controllers/users.js');
 app.post('/api/users', function(req, res) {
-  user.insert(req, res);
+  user.signUp(req, res);
+});
+
+app.get('/api/users', function(req, res) {
+  user.fetchUser(req, res);
 });
 
 if (!PROD) {

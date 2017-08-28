@@ -1,11 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, hashHistory } from 'react-router'
+import {Router, hashHistory} from 'react-router'
+import {connect} from 'react-redux'
+import {map} from 'lodash'
 
-import {FormGroup, FormControl } from 'react-bootstrap'
-import CButton from '../components/buttons/CButton'
+import {signUp} from '../actions/user'
 
-export default class RegisterOrLogin extends React.Component {
+import {FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import CButton from '../components/button/CButton'
+
+export class RegisterOrLogin extends React.Component {
   constructor(props) {
     super(props);
 
@@ -14,7 +18,9 @@ export default class RegisterOrLogin extends React.Component {
       email: '',
       password: '',
       isRegister: false,
-      isLogin: false
+      isLogin: false,
+      textClicked: false,
+      userExist: false
     };
 
     this.handleEmailChange    = this.handleEmailChange.bind(this);
@@ -61,12 +67,11 @@ export default class RegisterOrLogin extends React.Component {
       type: 'POST',
       data: user,
       success: function(data) {
-        var newUsers = users.concat([data]);
-        this.setState({data: newUsers});
-        hashHistory.push('/')
+        this.props.signUp(data);
+        hashHistory.push('/');
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({data: users});
+        this.setState({userExist: true});
       }.bind(this)
     });
   }
@@ -94,6 +99,7 @@ export default class RegisterOrLogin extends React.Component {
                   placeholder="Enter password"
                   value={this.state.password}
                   onChange={this.handlePasswordChange}/>
+                <ControlLabel className="alert-text">{this.state.userExist ? 'User already exist!!' : '' }</ControlLabel>
                 <div>
                   <CButton bsStyle="success" id="btn-register" type="submit" text={this.state.textClicked ? 'Register' : 'Login'} />
                 </div>
@@ -105,3 +111,19 @@ export default class RegisterOrLogin extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state, props) => {
+  return {
+    users: map(state.user.collection, item => item)
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signUp: (user) => {
+      dispatch(signUp(user));
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterOrLogin);

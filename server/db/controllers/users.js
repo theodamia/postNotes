@@ -3,7 +3,7 @@ var User = require('../models/user.js');
 
 module.exports = {
 
-  insert: function(req, res) {
+  signUp: function(req, res) {
     const user = new User({
       id: req.body._id,
       email: req.body.email,
@@ -12,16 +12,32 @@ module.exports = {
       isLogin: req.body.isLogin
     });
 
-    user.save(function(err, user) {
-      if(err) {
-        return handleError(err);
-        res.json(user);
+    User.findOne({ email: req.body.email }, (findErr, existingUser) => {
+      if (existingUser) {
+        return res.sendStatus(409);
       } else {
-        res.json(user);
-        console.log('Your user has been saved');
+        user.save((err, user) => {
+          if(err) {
+            return handleError(err);
+            res.json(user);
+          } else {
+            res.json(user);
+            console.log('Your user has been saved');
+          }
+        })
       }
-    })
-    // console.log('User Added!!');
-  }
+    });
+  },
 
+  fetchUser: function(req, res) {
+    const query = { _id: req.body._id };
+    User.findById(query, (err, user) => {
+      if (err) {
+        return res.status(500).send('User not found');
+        res.json(user);
+      }
+      console.log('User found');
+      res.json(user);
+    });
+  }
 };

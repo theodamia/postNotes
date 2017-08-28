@@ -1,12 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {connect} from 'react-redux'
+import {map} from 'lodash'
+
+import {storePost, fetchAllPost, deletePost} from '../actions/post'
 
 import FormBox from '../components/form/FormBox.js'
-import CButton from '../components/buttons/CButton.js'
+import CButton from '../components/button/CButton.js'
 import ListGroup from 'react-bootstrap/lib/ListGroup.js'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js'
 
-export default class Main extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +32,7 @@ export default class Main extends React.Component {
       cache: false,
       type: 'GET',
       success: function(data) {
-        this.setState({data: data});
+        this.props.fetchAllPost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -44,11 +48,9 @@ export default class Main extends React.Component {
       type: 'POST',
       data: post,
       success: function(data) {
-        var newPosts = posts.concat([data]);
-        this.setState({data: newPosts});
+        this.props.storePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({data: posts});
       }.bind(this)
     });
   }
@@ -59,7 +61,7 @@ export default class Main extends React.Component {
       type: 'DELETE',
       data: post,
       success: function(data) {
-        this.loadPostsFromServer();
+        this.props.deletePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -73,8 +75,7 @@ export default class Main extends React.Component {
       type: 'POST',
       data: post,
       success: function(data) {
-        this.loadPostsFromServer();
-        console.log("mpla");
+        this.props.storePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -88,7 +89,7 @@ export default class Main extends React.Component {
       type: 'POST',
       data: post,
       success: function(data) {
-        this.loadPostsFromServer();
+        this.props.storePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -100,8 +101,9 @@ export default class Main extends React.Component {
   }
   render() {
     const props = {
-      data: this.state.data
+      data: this.props.posts
     }
+    console.log(this.props.posts);
     return (
       <div className="col-lg-12">
         <div className="row">
@@ -115,6 +117,28 @@ export default class Main extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state, props) => {
+  return {
+    posts: map(state.post.collection, item => item)
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storePost: (post) => {
+      dispatch(storePost(post));
+    },
+    fetchAllPost: (post) => {
+      dispatch(fetchAllPost(post));
+    },
+    deletePost: (post) => {
+      dispatch(deletePost(post));
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
 
 class PostList extends React.Component {
   constructor(props) {
