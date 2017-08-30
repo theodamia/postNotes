@@ -1,9 +1,9 @@
 import { compineReducers } from 'react-redux'
-import { SIGN_UP_USER, FETCH_USER } from '../constants/index.js'
-import { keyBy, mapValues, omit } from 'lodash'
+import { SIGN_UP_USER, LOGIN_REQUEST_SUCCESS } from '../constants/index.js'
+import { keyBy, mapValues, omit, find } from 'lodash'
 
 const initialState = {
-  collection: {}
+  auth: {}
 };
 
 const user = (
@@ -13,14 +13,15 @@ const user = (
   switch (action.type) {
     case SIGN_UP_USER:
       return {
-        collection: {
-          ...state.collection,
+        auth: {
+          ...state,
           [action.payload._id]: action.payload
         }
       };
-    case FETCH_USER:
+    case LOGIN_REQUEST_SUCCESS:
       return {
-        collection: keyBy(action.payload, '_id')
+         ...state,
+        auth: action.payload
       };
     default:
       return state;

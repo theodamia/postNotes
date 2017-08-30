@@ -4,9 +4,9 @@ import {Router, hashHistory} from 'react-router'
 import {connect} from 'react-redux'
 import {map} from 'lodash'
 
-import {signUp} from '../actions/user'
+import {signUp, logIn} from '../actions/user'
 
-import {FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import {FormGroup, FormControl, ControlLabel} from 'react-bootstrap'
 import CButton from '../components/button/CButton'
 
 export class RegisterOrLogin extends React.Component {
@@ -19,14 +19,15 @@ export class RegisterOrLogin extends React.Component {
       password: '',
       isRegister: false,
       isLogin: false,
-      textClicked: false,
-      userExist: false
+      registerOrLogin: false,
+      userExistText: false
     };
 
     this.handleEmailChange    = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit         = this.handleSubmit.bind(this);
     this.handleUserRegister   = this.handleUserRegister.bind(this);
+    this.handleLogIn          = this.handleLogIn.bind(this);
   }
   handleEmailChange(e) {
     this.setState({email: e.target.value});
@@ -44,12 +45,19 @@ export class RegisterOrLogin extends React.Component {
       return;
     }
 
-    this.handleUserRegister({
-      email: email,
-      password: password,
-      isRegister: true,
-      isLogin: true
-    });
+    if(this.state.registerOrLogin) {
+      this.handleUserRegister({
+        email: email,
+        password: password,
+        isRegister: true,
+        isLogin: true
+      });
+    } else {
+      this.handleLogIn({
+        email: email,
+        password: password
+      });
+    }
 
     this.setState({
       email: '',
@@ -71,7 +79,22 @@ export class RegisterOrLogin extends React.Component {
         hashHistory.push('/');
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({userExist: true});
+        this.setState({userExistText: true});
+      }.bind(this)
+    });
+  }
+  handleLogIn(user) {
+    $.ajax({
+      url: 'http://localhost:3000/api/users/:id/isLogin',
+      dataType: 'json',
+      type: 'POST',
+      data: user,
+      success: function(data) {
+        this.props.logIn(data);
+        hashHistory.push('/');
+      }.bind(this),
+      error: function(xhr, status, err) {
+        this.setState({userExistText: true});
       }.bind(this)
     });
   }
@@ -79,10 +102,10 @@ export class RegisterOrLogin extends React.Component {
     return (
       <div className="col-lg-12">
         <div className="login-box">
-          <h1>{this.state.textClicked ? 'Register with Email' : 'Login with Email'}</h1>
+          <h1>{this.state.registerOrLogin ? 'Register with Email' : 'Login with Email'}</h1>
           <div className="login-text">
-            {this.state.textClicked ? 'Already have an account? ' : 'You need an account? ' }
-            <a onClick={() => this.setState({textClicked: !this.state.textClicked})}>{this.state.textClicked ? 'Login now.' : 'Register.'}</a>
+            {this.state.registerOrLogin ? 'Already have an account? ' : 'You need an account? ' }
+            <a onClick={() => this.setState({registerOrLogin: !this.state.registerOrLogin})}>{this.state.registerOrLogin ? 'Login now.' : 'Register.'}</a>
           </div>
           <div className="login-form">
             <form onSubmit={this.handleSubmit}>
@@ -99,9 +122,9 @@ export class RegisterOrLogin extends React.Component {
                   placeholder="Enter password"
                   value={this.state.password}
                   onChange={this.handlePasswordChange}/>
-                <ControlLabel className="alert-text">{this.state.userExist ? 'User already exist!!' : '' }</ControlLabel>
+                <ControlLabel className="alert-text">{this.state.userExistText ? 'User already exist!!' : '' }</ControlLabel>
                 <div>
-                  <CButton bsStyle="success" id="btn-register" type="submit" text={this.state.textClicked ? 'Register' : 'Login'} />
+                  <CButton bsStyle="success" id="btn-register" type="submit" text={this.state.registerOrLogin ? 'Register' : 'Login'} />
                 </div>
               </FormGroup>
             </form>
@@ -122,6 +145,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     signUp: (user) => {
       dispatch(signUp(user));
+    },
+    logIn: (user) => {
+      dispatch(logIn(user));
     }
   }
 };

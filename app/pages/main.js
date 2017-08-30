@@ -103,7 +103,6 @@ class Main extends React.Component {
     const props = {
       data: this.props.posts
     }
-    console.log(this.props.posts);
     return (
       <div className="col-lg-12">
         <div className="row">

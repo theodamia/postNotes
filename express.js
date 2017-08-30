@@ -2,12 +2,22 @@ var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var proxy = httpProxy.createProxyServer({
   changeOrigin: true
 });
 
 var app = express();
+
+app.use(session({
+  cookieName: 'session',
+  secret: '2C44-4D44-WppQ38S',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+  resave: true,
+  saveUninitialized: true
+}));
 
 var PROD = process.env.NODE_ENV === 'production';
 var PORT = PROD ? process.env.PORT : 3000;
@@ -71,8 +81,8 @@ app.post('/api/users', function(req, res) {
   user.signUp(req, res);
 });
 
-app.get('/api/users', function(req, res) {
-  user.fetchUser(req, res);
+app.post('/api/users/:id/isLogin', function(req, res) {
+  user.logIn(req, res);
 });
 
 if (!PROD) {
