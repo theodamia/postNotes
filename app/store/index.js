@@ -1,6 +1,7 @@
 import { createStore, combineReducers } from 'redux'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import { hashHistory } from 'react-router'
+import storeSynchronize from 'redux-localstore'
 import PostReducer from '../reducers/post'
 import UserReducer from '../reducers/user'
 
@@ -13,3 +14,5 @@ const store = createStore(
 )
 
 export default store;
+
+storeSynchronize(store)

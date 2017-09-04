@@ -43,8 +43,11 @@ module.exports = {
         res.json(user);
         // console.log("User: %j", user);
         console.log(req.session.user);
-
       }
     });
+  },
+
+  logOut: function(req, res) {
+    req.session.destroy();
   }
 };

@@ -33,6 +33,7 @@
     "express-session": "^1.15.5",
     "lodash": "^4.17.4",
     "mongodb": "^2.2.5",
+    "passport": "^0.4.0",
     "react": "^15.3.0",
     "react-bootstrap": "^0.30.2",
     "react-dom": "^15.3.0",
@@ -40,6 +41,7 @@
     "react-router": "^2.8.1",
     "react-router-dom": "^4.1.2",
     "react-router-redux": "^4.0.8",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-localstore": "^0.2.1"
   }
 }

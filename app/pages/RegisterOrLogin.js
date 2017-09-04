@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Router, hashHistory} from 'react-router'
-import {connect} from 'react-redux'
-import {map} from 'lodash'
+import { hashHistory } from 'react-router'
+import { connect } from 'react-redux'
+import { map } from 'lodash'
 
-import {signUp, logIn} from '../actions/user'
+import { signUp, logIn } from '../actions/user'
 
-import {FormGroup, FormControl, ControlLabel} from 'react-bootstrap'
+import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
 import CButton from '../components/button/CButton'
 
 export class RegisterOrLogin extends React.Component {

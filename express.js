@@ -16,7 +16,9 @@ app.use(session({
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  secure: true, // Ensures cookies are only used over HTTPS
+  ephemeral: true // Deletes the cookie when the browser is closed
 }));
 
 var PROD = process.env.NODE_ENV === 'production';
@@ -81,8 +83,12 @@ app.post('/api/users', function(req, res) {
   user.signUp(req, res);
 });
 
-app.post('/api/users/:id/isLogin', function(req, res) {
-  user.logIn(req, res);
+app.post('/api/users/:id/isLogin', function(req, res, next) {
+  user.logIn(req, res, next);
+});
+
+app.get('/api/users/:id/isLogin', function(req, res) {
+  user.logOut(req, res);
 });
 
 if (!PROD) {

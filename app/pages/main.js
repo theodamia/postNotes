@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {connect} from 'react-redux'
-import {map} from 'lodash'
+import { connect } from 'react-redux'
+import { map } from 'lodash'
 
-import {storePost, fetchAllPost, deletePost} from '../actions/post'
+import { storePost, fetchAllPost, deletePost } from '../actions/post'
 
 import FormBox from '../components/form/FormBox.js'
 import CButton from '../components/button/CButton.js'

@@ -1,5 +1,5 @@
 
-import {SIGN_UP_USER, LOGIN_REQUEST_SUCCESS} from '../constants/index'
+import { SIGN_UP_USER, LOGIN_REQUEST_SUCCESS } from '../constants/index'
 
 export function signUp(data) {
   return {
@@ -9,7 +9,7 @@ export function signUp(data) {
 }
 
 export function logIn(data) {
-  return{
+  return {
     type: LOGIN_REQUEST_SUCCESS,
     payload: data
   };

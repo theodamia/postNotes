@@ -2,24 +2,35 @@ import '../style/css/style.css'
 import '../style/styleJS.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Link } from 'react-router'
-import {connect} from 'react-redux'
-import {map, mapValues, omit} from 'lodash'
-import store from '../store/index.js';
+import { Link, hashHistory } from 'react-router'
+import { connect } from 'react-redux'
+import { getState, resetLocalStore } from 'redux-localstore'
+import store from '../store/index.js'
+import { isEmpty } from 'lodash'
 
 import {Nav, NavItem} from 'react-bootstrap'
 import NavBar from 'react-bootstrap/lib/Navbar'
 
-export class App extends React.Component {
+const state = getState();
+
+class App extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
+
+    this.handleLogOut = this.handleLogOut.bind(this);
+  }
+  handleLogOut() {
+    resetLocalStore();
+    window.location.reload();
   }
   render() {
-    console.log(this.props.user.email);
+    const props = {
+      user: this.props.user
+    }
     return (
       <div className="container">
         <header className="row">
-          <Navigation />
+          <Navigation {...props} handleLogOut={this.handleLogOut} />
         </header>
         <main className="row">
           {this.props.children}
@@ -37,9 +48,6 @@ const mapStateToProps = (state, props) => {
 export default connect(mapStateToProps)(App);
 
 class Navigation extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div className="col-lg-12 md-margintop">
@@ -50,7 +58,7 @@ class Navigation extends React.Component {
             </NavBar.Brand>
           </NavBar.Header>
           <Nav>
-            <NavItem><Link to="/RegisterOrLogin">Login</Link></NavItem>
+            <NavItem><Link onClick={() => {isEmpty(this.props.user) ? '' : this.props.handleLogOut()}} to={isEmpty(this.props.user) ? '/RegisterOrLogin' : '/'}>{isEmpty(this.props.user) ? 'Login' : 'Logout ' + this.props.user.email}</Link></NavItem>
             <NavItem href="/about">About</NavItem>
           </Nav>
         </NavBar>
