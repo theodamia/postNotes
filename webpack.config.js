@@ -3,7 +3,7 @@ var path = require('path');
 
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 var buildPath = path.resolve(__dirname, 'public', 'build');
-var mainPath = path.resolve(__dirname, 'app', 'app.js');
+var mainPath = path.resolve(__dirname, 'app', 'index.js');
 
 var config = {
 
@@ -55,6 +55,11 @@ var config = {
     new Webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    },
     historyApiFallback: true,
     contentBase: './'
   }

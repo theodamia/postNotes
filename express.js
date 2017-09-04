@@ -2,12 +2,24 @@ var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var proxy = httpProxy.createProxyServer({
   changeOrigin: true
 });
 
 var app = express();
+
+app.use(session({
+  cookieName: 'session',
+  secret: '2C44-4D44-WppQ38S',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+  resave: true,
+  saveUninitialized: true,
+  secure: true, // Ensures cookies are only used over HTTPS
+  ephemeral: true // Deletes the cookie when the browser is closed
+}));
 
 var PROD = process.env.NODE_ENV === 'production';
 var PORT = PROD ? process.env.PORT : 3000;
@@ -16,6 +28,7 @@ var publicPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicPath));
 
 var POSTS_FILE = path.join(__dirname, 'posts.json');
+var USERS_FILE = path.join(__dirname, 'users.json');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -34,16 +47,13 @@ app.use(function(req, res, next) {
     next();
 });
 
-// handle every other route with index.html, which will contain
-// a script tag to your application's JavaScript file(s).
-// app.get('*', function (req, res){
-//   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-// })
-
 app.get('/public', function(req, res) {
   res.render('public/index');
 });
 
+/**
+* Post requests
+*/
 var post = require('./server/db/controllers/posts.js');
 app.get('/api/posts', function(req, res) {
   post.all(req, res);
@@ -61,9 +71,24 @@ app.post('/api/posts/:id/text', function(req, res) {
   post.textUpdate(req, res);
 });
 
-
 app.delete('/api/posts', function(req, res) {
   post.delete(req, res);
+});
+
+/**
+* User requests
+*/
+var user = require('./server/db/controllers/users.js');
+app.post('/api/users', function(req, res) {
+  user.signUp(req, res);
+});
+
+app.post('/api/users/:id/isLogin', function(req, res, next) {
+  user.logIn(req, res, next);
+});
+
+app.get('/api/users/:id/isLogin', function(req, res) {
+  user.logOut(req, res);
 });
 
 if (!PROD) {

@@ -1,19 +1,19 @@
-import '../style/styleJS.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { connect } from 'react-redux'
+import { map } from 'lodash'
+
+import { storePost, fetchAllPost, deletePost } from '../actions/post'
 
 import FormBox from '../components/form/FormBox.js'
-
-import DoneButton from '../components/buttons/DoneButton.js'
-import DeleteButton from '../components/buttons/DeleteButton.js'
-import UndoneButton from '../components/buttons/UndoneButton.js'
-
+import CButton from '../components/button/CButton.js'
 import ListGroup from 'react-bootstrap/lib/ListGroup.js'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem.js'
 
-export default class Main extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       data: []
     };
@@ -32,7 +32,7 @@ export default class Main extends React.Component {
       cache: false,
       type: 'GET',
       success: function(data) {
-        this.setState({data: data});
+        this.props.fetchAllPost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -48,11 +48,9 @@ export default class Main extends React.Component {
       type: 'POST',
       data: post,
       success: function(data) {
-        var newPosts = posts.concat([data]);
-        this.setState({data: newPosts});
+        this.props.storePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({data: posts});
       }.bind(this)
     });
   }
@@ -63,7 +61,7 @@ export default class Main extends React.Component {
       type: 'DELETE',
       data: post,
       success: function(data) {
-        this.loadPostsFromServer();
+        this.props.deletePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -77,7 +75,7 @@ export default class Main extends React.Component {
       type: 'POST',
       data: post,
       success: function(data) {
-        this.loadPostsFromServer();
+        this.props.storePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -91,7 +89,7 @@ export default class Main extends React.Component {
       type: 'POST',
       data: post,
       success: function(data) {
-        this.loadPostsFromServer();
+        this.props.storePost(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr, status, err.toString());
@@ -103,7 +101,7 @@ export default class Main extends React.Component {
   }
   render() {
     const props = {
-      data: this.state.data
+      data: this.props.posts
     }
     return (
       <div className="col-lg-12">
@@ -118,6 +116,28 @@ export default class Main extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state, props) => {
+  return {
+    posts: map(state.post.collection, item => item)
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storePost: (post) => {
+      dispatch(storePost(post));
+    },
+    fetchAllPost: (post) => {
+      dispatch(fetchAllPost(post));
+    },
+    deletePost: (post) => {
+      dispatch(deletePost(post));
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
 
 class PostList extends React.Component {
   constructor(props) {
@@ -151,11 +171,11 @@ class PostList extends React.Component {
       if(post.done == false) {
         return (
           <Post key={post._id}>
-            <input data-id={post._id} className="npt-text" type="text" readOnly="true" defaultValue={post.text}
-              onBlur={this.handleOnBlur} />
+            <input data-id={post._id} className="npt-text" type="text" readOnly="true"
+             defaultValue={post.text} onBlur={this.handleOnBlur} />
             <span>
-              <DoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
-              <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
+              <CButton id="btnDone" value="Done" title="Done" onClick={() => {this.props.handleDoneChange(post)}}/>
+              <CButton id="btnDelete" value="Delete" title="Delete" onClick={() => {this.props.handlerDelete(post)}}/>
             </span>
           </Post>
         )
@@ -207,8 +227,8 @@ class FavouriteList extends React.Component {
             <input data-id={post._id} className="npt-text" type="text" readOnly="true" defaultValue={post.text}
               onBlur={this.handleOnBlur} />
             <span>
-              <UndoneButton handleDoneChange={() => {this.props.handleDoneChange(post)}} />
-              <DeleteButton handlerDelete={() => {this.props.handlerDelete(post)}} />
+              <CButton id="btnUndone" value="Undone" title="Undone" onClick={() => {this.props.handleDoneChange(post)}}/>
+              <CButton id="btnDelete" value="Delete" title="Delete" onClick={() => {this.props.handlerDelete(post)}}/>
             </span>
           </Post>
         )

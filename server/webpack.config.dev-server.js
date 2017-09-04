@@ -2,7 +2,7 @@ var Webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./../webpack.config.js');
 var path = require('path');
-var mainPath = path.resolve(__dirname, '..', 'app', 'app.js');
+var mainPath = path.resolve(__dirname, '..', 'index', 'index.js');
 
 module.exports = function () {
 
@@ -24,7 +24,7 @@ module.exports = function () {
   });
 
   var bundler = new WebpackDevServer(compiler, {
-
+    headers: { "Access-Control-Allow-Origin": "*" },
     // We need to tell Webpack to serve our bundled application
     // from the build path. When proxying:
     // http://localhost:3000/build -> http://localhost:8080/build
