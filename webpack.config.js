@@ -31,7 +31,6 @@ var config = {
     publicPath: '/build/'
   },
   module: {
-
     loaders: [
     {
       test: [/\.js$|\.jsx$/],
@@ -44,9 +43,7 @@ var config = {
     {
       test: /\.css$/,
       loader: 'style-loader!css-loader'
-    }
-
-    ]
+    }]
   },
 
   // We have to manually add the Hot Replacement plugin when running

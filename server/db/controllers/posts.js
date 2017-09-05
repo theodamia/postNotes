@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose'
 var Post = require('../models/post.js');
 
 var connection = require('../connection.js');
@@ -6,7 +6,7 @@ connection.connect();
 
 module.exports = {
 
-  insert: function(req, res) {
+  insert:(req, res) => {
     const post = new Post({
       id: req.body._id,
       text: req.body.text,
@@ -24,7 +24,7 @@ module.exports = {
     })
   },
 
-  all: function(req, res) {
+  all:(req, res) => {
     Post.find({}).exec((err, post) => {
       if (err) {
         console.log('Error in first query');
@@ -35,7 +35,7 @@ module.exports = {
     });
   },
 
-  delete: function(req, res) {
+  delete:(req, res) => {
     const query = { _id: req.body._id };
     Post.findOneAndRemove(query, (err, post) => {
       if (err) {
@@ -48,7 +48,7 @@ module.exports = {
     });
   },
 
-  done: function(req, res) {
+  done:(req, res) => {
     const query = { _id: req.body._id };
     Post.findById(query, (err, post) => {
       if(post.done) {
@@ -63,7 +63,7 @@ module.exports = {
     });
   },
 
-  textUpdate: function(req, res) {
+  textUpdate:(req, res) => {
     const query = { _id: req.body._id };
     Post.findOneAndUpdate(query, {"$set": { "text":req.body.text}}, (err, post) => {
         if (err) return res.send(500, { error: err });

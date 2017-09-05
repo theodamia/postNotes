@@ -1,8 +1,8 @@
-var express = require('express');
-var path = require('path');
-var httpProxy = require('http-proxy');
-var bodyParser = require('body-parser');
-var session = require('express-session');
+import express from 'express'
+import path from 'path'
+import httpProxy from 'http-proxy'
+import bodyParser from 'body-parser'
+import session from 'express-session'
 
 var proxy = httpProxy.createProxyServer({
   changeOrigin: true
@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Additional middleware which will set headers that we need on each request.
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     // Set permissive CORS header - this allows this server to be used only as
     // an API server in conjunction with something like webpack-dev-server.
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -47,7 +47,29 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/public', function(req, res) {
+if (!PROD) {
+  var bundle = require('./server/webpack.config.dev-server.js');
+  bundle();
+
+  // Any requests to localhost:3000/build is proxied
+  // to webpack-dev-server
+  app.all('/build/*', (req, res) => {
+    proxy.web(req, res, {
+        target: 'http://localhost:8080'
+    });
+  });
+}
+
+proxy.on('error', (e) => {
+  console.log('Could not connect to proxy, please try again...');
+});
+
+app.listen(PORT, () => {
+  console.log('Express server running on port ' + PORT);
+  console.log('Wepback-dev-server running on port 8080');
+});
+
+app.get('/public', (req, res) => {
   res.render('public/index');
 });
 
@@ -55,23 +77,23 @@ app.get('/public', function(req, res) {
 * Post requests
 */
 var post = require('./server/db/controllers/posts.js');
-app.get('/api/posts', function(req, res) {
+app.get('/api/posts', (req, res) => {
   post.all(req, res);
 });
 
-app.post('/api/posts', function(req, res) {
+app.post('/api/posts', (req, res) => {
   post.insert(req, res);
 });
 
-app.post('/api/posts/:id/done', function(req, res) {
+app.post('/api/posts/:id/done', (req, res) => {
   post.done(req, res);
 });
 
-app.post('/api/posts/:id/text', function(req, res) {
+app.post('/api/posts/:id/text', (req, res) => {
   post.textUpdate(req, res);
 });
 
-app.delete('/api/posts', function(req, res) {
+app.delete('/api/posts', (req, res) => {
   post.delete(req, res);
 });
 
@@ -79,36 +101,14 @@ app.delete('/api/posts', function(req, res) {
 * User requests
 */
 var user = require('./server/db/controllers/users.js');
-app.post('/api/users', function(req, res) {
+app.post('/api/users', (req, res) => {
   user.signUp(req, res);
 });
 
-app.post('/api/users/:id/isLogin', function(req, res, next) {
+app.post('/api/users/:id/isLogin', (req, res, next) => {
   user.logIn(req, res, next);
 });
 
-app.get('/api/users/:id/isLogin', function(req, res) {
+app.get('/api/users/:id/isLogin', (req, res) => {
   user.logOut(req, res);
-});
-
-if (!PROD) {
-  var bundle = require('./server/webpack.config.dev-server.js');
-  bundle();
-
-  // Any requests to localhost:3000/build is proxied
-  // to webpack-dev-server
-  app.all('/build/*', function (req, res) {
-    proxy.web(req, res, {
-        target: 'http://localhost:8080'
-    });
-  });
-}
-
-proxy.on('error', function(e) {
-  console.log('Could not connect to proxy, please try again...');
-});
-
-app.listen(PORT, function () {
-  console.log('Express server running on port ' + PORT);
-  console.log('Wepback-dev-server running on port 8080');
 });

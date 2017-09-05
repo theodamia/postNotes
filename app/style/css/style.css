@@ -99,15 +99,16 @@ body {
 
 #nav-bar a {
   color: #000;
+  background-color: #eee!important;
 }
 
-#nav-bar .navbar-brand {
+#nav-brand {
   font-size: 29px;
-  color: #337ab7;
+  color: #337ab7!important;
   font-weight: bold;
 }
 
-.navbar-nav>li>a {
+#nav-list>li>a {
   line-height: 27px;
   font-size: 19px;
 }
