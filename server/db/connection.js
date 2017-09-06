@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose'
 
 module.exports = {
-  connect: function() {
+  connect:() => {
     mongoose.connect('mongodb://localhost:27017/postsDB');
 
     var db = mongoose.connection;

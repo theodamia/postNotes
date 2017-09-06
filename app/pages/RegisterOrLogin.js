@@ -9,7 +9,7 @@ import { signUp, logIn } from '../actions/user'
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
 import CButton from '../components/button/CButton'
 
-export class RegisterOrLogin extends React.Component {
+class RegisterOrLogin extends React.Component {
   constructor(props) {
     super(props);
 

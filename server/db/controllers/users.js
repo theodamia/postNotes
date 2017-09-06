@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose'
 var User = require('../models/user.js');
 
 module.exports = {
 
-  signUp: function(req, res) {
+  signUp:(req, res) => {
     const user = new User({
       id: req.body._id,
       email: req.body.email,
@@ -29,7 +29,7 @@ module.exports = {
     });
   },
 
-  logIn: function(req, res) {
+  logIn:(req, res) => {
     const query = { email: req.body.email, password: req.body.password };
     User.findOne(query, (err, user) => {
       if (err) {
@@ -47,7 +47,7 @@ module.exports = {
     });
   },
 
-  logOut: function(req, res) {
+  logOut: (req, res) => {
     req.session.destroy();
   }
 };
