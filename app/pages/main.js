@@ -1,7 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { map } from 'lodash'
+import { map, omit } from 'lodash'
 import { storePost, fetchAllPost, deletePost } from '../actions/post'
 
 import PostList from '../components/list/PostList.js'
@@ -24,74 +22,48 @@ class Main extends React.Component {
     this.handleTextUpdate     = this.handleTextUpdate.bind(this);
   }
   loadPostsFromServer() {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'json',
-      cache: false,
-      type: 'GET',
-      success: function(data) {
-        this.props.fetchAllPost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
+    axios.get('http://localhost:3000/api/posts')
+    .then(response => {
+      this.props.fetchAllPost(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
     });
   }
   handlePostSubmit(post) {
-    var posts = this.state.data;
-
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'json',
-      type: 'POST',
-      data: post,
-      success: function(data) {
-        this.props.storePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-      }.bind(this)
+    axios.post('http://localhost:3000/api/posts', {text: post.text})
+    .then(response => {
+      this.props.storePost(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   handlerDelete(post) {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'json',
-      type: 'DELETE',
-      data: post,
-      success: function(data) {
-        this.props.deletePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr, status, err.toString());
-      }.bind(this)
+    axios.delete('http://localhost:3000/api/posts', {data: {_id: post._id}})
+    .then(response => {
+      this.props.deletePost(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   handleDoneChange(post) {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts/:id/done',
-      dataType: 'json',
-      type: 'POST',
-      data: post,
-      success: function(data) {
-        this.props.storePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr, status, err.toString());
-      }.bind(this)
+    axios.post('http://localhost:3000/api/posts/:id/done', omit(post))
+    .then(response => {
+      this.props.storePost(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   handleTextUpdate(post) {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts/:id/text',
-      dataType: 'json',
-      type: 'POST',
-      data: post,
-      success: function(data) {
-        this.props.storePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr, status, err.toString());
-      }.bind(this)
+    axios.post('http://localhost:3000/api/posts/:id/text', omit(post))
+    .then(response => {
+      this.props.storePost(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   componentDidMount() {

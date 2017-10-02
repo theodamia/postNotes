@@ -1,6 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-
 import {FormGroup, FormControl } from 'react-bootstrap'
 import CButton from '../button/CButton'
 

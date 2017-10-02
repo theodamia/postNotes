@@ -24,19 +24,23 @@ module.exports = function () {
   });
 
   var bundler = new WebpackDevServer(compiler, {
-    headers: { "Access-Control-Allow-Origin": "*" },
     // We need to tell Webpack to serve our bundled application
     // from the build path. When proxying:
     // http://localhost:3000/build -> http://localhost:8080/build
     publicPath: '/build/',
-
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
+      'Access-Control-Allow-Credentials': true
+    },
     // Configure hot replacement
     hot: true,
     // The rest is terminal configurations
     quiet: true,
     noInfo: false,
     stats: {
-      colors: true
+      colors: false
     }
   });
 

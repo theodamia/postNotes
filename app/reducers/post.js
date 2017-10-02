@@ -1,6 +1,6 @@
 import { compineReducers } from 'react-redux'
 import { STORE_POST, FETCH_ALL_POST, DELETE_POST } from '../constants/index.js'
-import { keyBy, mapValues, omit } from 'lodash'
+import { keyBy, omit } from 'lodash'
 
 const initialState = {
   collection: {}

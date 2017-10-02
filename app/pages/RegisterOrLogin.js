@@ -1,9 +1,6 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { hashHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { map } from 'lodash'
-
 import { signUp, logIn } from '../actions/user'
 
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
@@ -67,35 +64,32 @@ class RegisterOrLogin extends React.Component {
     });
   }
   handleUserRegister(user) {
-    var users = this.state.data;
-
-    $.ajax({
-      url: 'http://localhost:3000/api/users',
-      dataType: 'json',
-      type: 'POST',
-      data: user,
-      success: function(data) {
-        this.props.signUp(data);
-        hashHistory.push('/');
-      }.bind(this),
-      error: function(xhr, status, err) {
-        this.setState({userExistText: true});
-      }.bind(this)
+    axios.post('http://localhost:3000/api/users', {email: user.email, password: user.password})
+    .then(response => {
+      this.props.signUp(response.data)
+      // hashHistory.push('public/#/user=' + response.data.email);
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   handleLogIn(user) {
-    $.ajax({
-      url: 'http://localhost:3000/api/users/:id/isLogin',
-      dataType: 'json',
-      type: 'POST',
-      data: user,
-      success: function(data) {
-        this.props.logIn(data);
-        hashHistory.push('/');
-      }.bind(this),
-      error: function(xhr, status, err) {
-        this.setState({userExistText: true});
-      }.bind(this)
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/api/users/login',
+      withCredentials: true,
+      data: {
+        email: user.email,
+        password: user.password
+      }
+    })
+    .then(response => {
+      this.props.logIn(response.data);
+      console.log(response.data);
+      hashHistory.push('/?user=' + response.data.email + '/');
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   render() {

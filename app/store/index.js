@@ -15,4 +15,4 @@ const store = createStore(
 
 export default store;
 
-storeSynchronize(store)
+// storeSynchronize(store)

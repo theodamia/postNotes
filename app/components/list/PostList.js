@@ -1,5 +1,3 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { map } from 'lodash'
 
 import CButton from '../button/CButton.js'
