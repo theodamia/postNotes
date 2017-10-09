@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { map, omit } from 'lodash'
+import { map, omit, filter } from 'lodash'
 import { storePost, fetchAllPost, deletePost } from '../actions/post'
 
 import PostList from '../components/list/PostList.js'
@@ -20,6 +20,7 @@ class Main extends React.Component {
     this.componentDidMount    = this.componentDidMount.bind(this);
     this.handleDoneChange     = this.handleDoneChange.bind(this);
     this.handleTextUpdate     = this.handleTextUpdate.bind(this);
+    this.filterPosts  = this.filterPosts.bind(this);
   }
   loadPostsFromServer() {
     axios.get('http://localhost:3000/api/posts')
@@ -61,26 +62,40 @@ class Main extends React.Component {
     axios.post('http://localhost:3000/api/posts/:id/text', omit(post))
     .then(response => {
       this.props.storePost(response.data)
+      this.loadPostsFromServer();
     })
     .catch(function (error) {
       console.log(error);
     });
   }
+  filterPosts(done) {
+    return this.props.posts.filter(post => post.done === done);
+  }
   componentDidMount() {
     this.loadPostsFromServer();
   }
   render() {
-    const props = {
-      data: this.props.posts
-    }
+    var postsDone = this.filterPosts(true);
+    var postsUndone = this.filterPosts(false);
+
     return (
       <div className="col-lg-12">
         <div className="row">
           <FormBox onPostSubmit={this.handlePostSubmit} />
         </div>
         <div className="row">
-          <PostList {...props} done={false} onTextUpdate={this.handleTextUpdate} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange} />
-          <PostList {...props} done={true} onTextUpdate={this.handleTextUpdate} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange}/>
+          <PostList
+            done={false}
+            posts={postsUndone}
+            onTextUpdate={this.handleTextUpdate}
+            handlerDelete={this.handlerDelete}
+            handleDoneChange={this.handleDoneChange} />
+          <PostList
+            done={true}
+            posts={postsDone}
+            onTextUpdate={this.handleTextUpdate}
+            handlerDelete={this.handlerDelete}
+            handleDoneChange={this.handleDoneChange} />
         </div>
       </div>
     );

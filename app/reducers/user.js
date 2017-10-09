@@ -1,6 +1,6 @@
 import { compineReducers } from 'react-redux'
 import { defineState } from 'redux-localstore'
-import * as constants from '../constants/index'
+import * as types from '../constants/index'
 import { keyBy, mapValues, omit, find } from 'lodash'
 
 const defaultState = {
@@ -14,17 +14,17 @@ const user = (
   action
 ) => {
   switch (action.type) {
-    case constants.SIGN_UP_USER:
+    case types.SIGN_UP_USER:
       return {
         ...state,
        auth: action.payload
       };
-    case constants.LOGIN_REQUEST_SUCCESS:
+    case types.LOGIN_REQUEST_SUCCESS:
       return {
          ...state,
         auth: action.payload
       };
-    case constants.LOG_OUT_REQUEST:
+    case types.LOG_OUT_REQUEST:
       return {
         //  ...state,
         // auth: action.payload

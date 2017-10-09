@@ -1,15 +1,23 @@
 import { map } from 'lodash'
-
-import CButton from '../button/CButton.js'
+import { connect } from 'react-redux'
+import { CButton } from "elements"
 import Post from './item/Post.js'
+import SearchItem from './item/SearchItem.js'
 import ListGroup from 'react-bootstrap/lib/ListGroup.js'
+import { keyBy, omit, filter, includes, lowerCase } from 'lodash'
 
 export default class PostList extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      searchValue: ""
+    };
+
     this.handleOnBlur  = this.handleOnBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.filterSearchValue  = this.filterSearchValue.bind(this);
   }
   handleOnBlur(e) {
     e.preventDefault();
@@ -31,32 +39,27 @@ export default class PostList extends React.Component {
       this.handleOnBlur(e);
     }
   }
+  onSearchChange(e) {
+    var searchValue = e.target.value.trim();
+    this.setState({searchValue: searchValue});
+  }
+  filterSearchValue() {
+    return this.props.posts.filter(post => lowerCase(post.text).includes(lowerCase(this.state.searchValue)));
+  }
   render() {
-    var postNodes = this.props.data.filter((post) => {
-      return post.done === this.props.done;
-    })
-    .map((post) => {
-      if(this.props.done) {
-        var doneButton = <CButton id="btnUndone" value="Undone" title="Undone" onClick={() => {this.props.handleDoneChange(post)}}/>
-      } else {
-        var doneButton = <CButton id="btnDone" value="Done" title="Done" onClick={() => {this.props.handleDoneChange(post)}}/>
-      }
-      return (
-        <Post key={post._id}>
-          <input data-id={post._id} className="npt-text" type="text" readOnly="true"
-           defaultValue={post.text} onBlur={this.handleOnBlur} />
-          <span>
-            {doneButton}
-            <CButton id="btnDelete" value="Delete" title="Delete" onClick={() => {this.props.handlerDelete(post)}}/>
-          </span>
-        </Post>
-      )
-    });
     return (
       <div className="post-list col-lg-6">
-        <h3 className="sm-marginbot">Notes List</h3>
+        <h3 className="sm-marginbot">{this.props.done ? 'Completed Notes' : 'Notes List'}</h3>
         <ListGroup className="list">
-          {postNodes}
+          <SearchItem onChange={this.onSearchChange} />
+          {this.filterSearchValue().map(post => (
+            <Post
+              key={post._id}
+              post={post}
+              handleDoneChange={this.props.handleDoneChange}
+              handlerDelete={this.props.handlerDelete}
+              handleOnBlur={this.handleOnBlur} />
+          ))}
         </ListGroup>
       </div>
     );

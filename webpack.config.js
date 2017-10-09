@@ -45,7 +45,11 @@ var config = {
       loader: 'style-loader!css-loader'
     }]
   },
-
+  resolve: {
+    alias: {
+      elements: path.resolve(__dirname, 'app/components/', 'index.js')
+    }
+  },
   // We have to manually add the Hot Replacement plugin when running
   // from Node
   plugins: [
@@ -54,14 +58,9 @@ var config = {
       React: 'react',
       ReactDOM: 'react-dom',
       cookie: 'cookie',
-      axios: 'axios',
-      // _: 'lodash'
+      axios: 'axios'
     })
   ]
-  // devServer: {
-  //   historyApiFallback: true,
-  //   contentBase: './'
-  // }
 };
 
 module.exports = config;
