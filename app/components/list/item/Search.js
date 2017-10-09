@@ -5,7 +5,11 @@ export default class SearchItem extends React.Component {
     const {onChange} = this.props;
     return (
       <ListGroupItem>
-          <input type="text" onChange={onChange}/>
+          <input
+            className="search-box"
+            type="text"
+            placeholder="  Search note..."
+            onChange={onChange}/>
       </ListGroupItem>
     );
   }

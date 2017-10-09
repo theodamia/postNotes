@@ -1,10 +1,7 @@
-import { map } from 'lodash'
 import { connect } from 'react-redux'
-import { CButton } from "elements"
 import Post from './item/Post.js'
-import SearchItem from './item/SearchItem.js'
+import Search from './item/Search.js'
 import ListGroup from 'react-bootstrap/lib/ListGroup.js'
-import { keyBy, omit, filter, includes, lowerCase } from 'lodash'
 
 export default class PostList extends React.Component {
   constructor(props) {
@@ -44,14 +41,14 @@ export default class PostList extends React.Component {
     this.setState({searchValue: searchValue});
   }
   filterSearchValue() {
-    return this.props.posts.filter(post => lowerCase(post.text).includes(lowerCase(this.state.searchValue)));
+    return this.props.posts.filter(post => _.lowerCase(post.text).includes(_.lowerCase(this.state.searchValue)));
   }
   render() {
     return (
       <div className="post-list col-lg-6">
         <h3 className="sm-marginbot">{this.props.done ? 'Completed Notes' : 'Notes List'}</h3>
         <ListGroup className="list">
-          <SearchItem onChange={this.onSearchChange} />
+          <Search onChange={this.onSearchChange} />
           {this.filterSearchValue().map(post => (
             <Post
               key={post._id}

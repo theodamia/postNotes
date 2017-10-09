@@ -1,3 +1,3 @@
-import CButton from './button/CButton.js'
+import Button from './button/Button.js'
 
-export { CButton }
+export { Button }

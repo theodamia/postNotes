@@ -1,8 +1,6 @@
 import { Link, hashHistory } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap';
-import { isEmpty } from 'lodash'
-
-import {Nav, NavItem} from 'react-bootstrap'
+import { Nav, NavItem } from 'react-bootstrap'
 import NavBar from 'react-bootstrap/lib/Navbar'
 
 export default class Navigation extends React.Component {
@@ -16,8 +14,11 @@ export default class Navigation extends React.Component {
             </NavBar.Brand>
           </NavBar.Header>
           <Nav id="nav-list">
-            <LinkContainer className="nav-item" onClick={() => {isEmpty(this.props.user) ? '' : this.props.handleLogOut()}} to={isEmpty(this.props.user) ? '/RegisterOrLogin' : '/'}>
-              <NavItem>{isEmpty(this.props.user) ? 'Login' : 'Logout ' + this.props.user.email}</NavItem>
+            <LinkContainer
+              className="nav-item"
+              onClick={() => {_.isEmpty(this.props.user) ? '' : this.props.handleLogOut()}}
+              to={_.isEmpty(this.props.user) ? '/RegisterOrLogin' : '/'}>
+                <NavItem>{_.isEmpty(this.props.user) ? 'Login' : 'Logout ' + this.props.user.email}</NavItem>
             </LinkContainer>
             <NavItem href="/about">About</NavItem>
           </Nav>

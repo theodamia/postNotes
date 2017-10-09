@@ -1,10 +1,9 @@
 import { hashHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { map } from 'lodash'
 import { signUp, logIn } from '../actions/user'
 
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
-import CButton from '../components/button/CButton'
+import Button from '../components/button/Button'
 
 class RegisterOrLogin extends React.Component {
   constructor(props) {
@@ -118,7 +117,7 @@ class RegisterOrLogin extends React.Component {
                   onChange={this.handlePasswordChange}/>
                 <ControlLabel className="alert-text">{this.state.userExistText ? 'User already exist!!' : '' }</ControlLabel>
                 <div>
-                  <CButton bsStyle="success" id="btn-register" type="submit" text={this.state.registerOrLogin ? 'Register' : 'Login'} />
+                  <Button bsStyle="success" id="btn-register" type="submit" text={this.state.registerOrLogin ? 'Register' : 'Login'} />
                 </div>
               </FormGroup>
             </form>
@@ -131,7 +130,7 @@ class RegisterOrLogin extends React.Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    users: map(state.user.collection, item => item)
+    users: _.map(state.user.collection, item => item)
   }
 };
 

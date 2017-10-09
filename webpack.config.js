@@ -58,7 +58,8 @@ var config = {
       React: 'react',
       ReactDOM: 'react-dom',
       cookie: 'cookie',
-      axios: 'axios'
+      axios: 'axios',
+      '_': 'lodash'
     })
   ]
 };

@@ -1,7 +1,6 @@
 import { compineReducers } from 'react-redux'
 import { defineState } from 'redux-localstore'
 import * as types from '../constants/index'
-import { keyBy, mapValues, omit, find } from 'lodash'
 
 const defaultState = {
   auth: {}

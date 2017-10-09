@@ -172,3 +172,13 @@ body {
   color: red;
   font-size: 15px;
 }
+
+.search-box {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-box:focus {
+  border-color: #337ab7;
+}

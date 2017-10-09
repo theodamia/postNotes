@@ -1,10 +1,8 @@
 import { connect } from 'react-redux'
-import { map, omit, filter } from 'lodash'
 import { storePost, fetchAllPost, deletePost } from '../actions/post'
 
 import PostList from '../components/list/PostList.js'
-import FormBox from '../components/form/FormBox.js'
-import CButton from '../components/button/CButton.js'
+import PostForm from '../components/form/PostForm.js'
 
 class Main extends React.Component {
   constructor(props) {
@@ -20,7 +18,7 @@ class Main extends React.Component {
     this.componentDidMount    = this.componentDidMount.bind(this);
     this.handleDoneChange     = this.handleDoneChange.bind(this);
     this.handleTextUpdate     = this.handleTextUpdate.bind(this);
-    this.filterPosts  = this.filterPosts.bind(this);
+    this.filterPosts          = this.filterPosts.bind(this);
   }
   loadPostsFromServer() {
     axios.get('http://localhost:3000/api/posts')
@@ -50,7 +48,7 @@ class Main extends React.Component {
     });
   }
   handleDoneChange(post) {
-    axios.post('http://localhost:3000/api/posts/:id/done', omit(post))
+    axios.post('http://localhost:3000/api/posts/:id/done', _.omit(post))
     .then(response => {
       this.props.storePost(response.data)
     })
@@ -59,7 +57,7 @@ class Main extends React.Component {
     });
   }
   handleTextUpdate(post) {
-    axios.post('http://localhost:3000/api/posts/:id/text', omit(post))
+    axios.post('http://localhost:3000/api/posts/:id/text', _.omit(post))
     .then(response => {
       this.props.storePost(response.data)
       this.loadPostsFromServer();
@@ -81,7 +79,7 @@ class Main extends React.Component {
     return (
       <div className="col-lg-12">
         <div className="row">
-          <FormBox onPostSubmit={this.handlePostSubmit} />
+          <PostForm onPostSubmit={this.handlePostSubmit} />
         </div>
         <div className="row">
           <PostList
@@ -104,7 +102,7 @@ class Main extends React.Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    posts: map(state.post.collection, item => item)
+    posts: _.map(state.post.collection, item => item)
   }
 };
 
