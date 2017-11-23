@@ -45,21 +45,23 @@ var config = {
       loader: 'style-loader!css-loader'
     }]
   },
-
+  resolve: {
+    alias: {
+      elements: path.resolve(__dirname, 'app/components/', 'index.js')
+    }
+  },
   // We have to manually add the Hot Replacement plugin when running
   // from Node
   plugins: [
-    new Webpack.HotModuleReplacementPlugin()
-  ],
-  devServer: {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    },
-    historyApiFallback: true,
-    contentBase: './'
-  }
+    new Webpack.HotModuleReplacementPlugin(),
+    new Webpack.ProvidePlugin({
+      React: 'react',
+      ReactDOM: 'react-dom',
+      cookie: 'cookie',
+      axios: 'axios',
+      '_': 'lodash'
+    })
+  ]
 };
 
 module.exports = config;

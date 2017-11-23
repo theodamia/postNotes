@@ -1,12 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { map } from 'lodash'
 import { storePost, fetchAllPost, deletePost } from '../actions/post'
 
 import PostList from '../components/list/PostList.js'
-import FormBox from '../components/form/FormBox.js'
-import CButton from '../components/button/CButton.js'
+import PostForm from '../components/form/PostForm.js'
 
 class Main extends React.Component {
   constructor(props) {
@@ -22,93 +18,82 @@ class Main extends React.Component {
     this.componentDidMount    = this.componentDidMount.bind(this);
     this.handleDoneChange     = this.handleDoneChange.bind(this);
     this.handleTextUpdate     = this.handleTextUpdate.bind(this);
+    this.filterPosts          = this.filterPosts.bind(this);
   }
   loadPostsFromServer() {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'json',
-      cache: false,
-      type: 'GET',
-      success: function(data) {
-        this.props.fetchAllPost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
+    axios.get('http://localhost:3000/api/posts')
+    .then(response => {
+      this.props.fetchAllPost(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
     });
   }
   handlePostSubmit(post) {
-    var posts = this.state.data;
-
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'json',
-      type: 'POST',
-      data: post,
-      success: function(data) {
-        this.props.storePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-      }.bind(this)
+    axios.post('http://localhost:3000/api/posts', {text: post.text})
+    .then(response => {
+      this.props.storePost(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   handlerDelete(post) {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts',
-      dataType: 'json',
-      type: 'DELETE',
-      data: post,
-      success: function(data) {
-        this.props.deletePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr, status, err.toString());
-      }.bind(this)
+    axios.delete('http://localhost:3000/api/posts', {data: {_id: post._id}})
+    .then(response => {
+      this.props.deletePost(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   handleDoneChange(post) {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts/:id/done',
-      dataType: 'json',
-      type: 'POST',
-      data: post,
-      success: function(data) {
-        this.props.storePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr, status, err.toString());
-      }.bind(this)
+    axios.post('http://localhost:3000/api/posts/:id/done', _.omit(post))
+    .then(response => {
+      this.props.storePost(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   handleTextUpdate(post) {
-    $.ajax({
-      url: 'http://localhost:3000/api/posts/:id/text',
-      dataType: 'json',
-      type: 'POST',
-      data: post,
-      success: function(data) {
-        this.props.storePost(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr, status, err.toString());
-      }.bind(this)
+    axios.post('http://localhost:3000/api/posts/:id/text', _.omit(post))
+    .then(response => {
+      this.props.storePost(response.data)
+      this.loadPostsFromServer();
+    })
+    .catch(function (error) {
+      console.log(error);
     });
+  }
+  filterPosts(done) {
+    return this.props.posts.filter(post => post.done === done);
   }
   componentDidMount() {
     this.loadPostsFromServer();
   }
   render() {
-    const props = {
-      data: this.props.posts
-    }
+    var postsDone = this.filterPosts(true);
+    var postsUndone = this.filterPosts(false);
+
     return (
       <div className="col-lg-12">
         <div className="row">
-          <FormBox onPostSubmit={this.handlePostSubmit} />
+          <PostForm onPostSubmit={this.handlePostSubmit} />
         </div>
         <div className="row">
-          <PostList {...props} done={false} onTextUpdate={this.handleTextUpdate} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange} />
-          <PostList {...props} done={true} onTextUpdate={this.handleTextUpdate} handlerDelete={this.handlerDelete} handleDoneChange={this.handleDoneChange}/>
+          <PostList
+            done={false}
+            posts={postsUndone}
+            onTextUpdate={this.handleTextUpdate}
+            handlerDelete={this.handlerDelete}
+            handleDoneChange={this.handleDoneChange} />
+          <PostList
+            done={true}
+            posts={postsDone}
+            onTextUpdate={this.handleTextUpdate}
+            handlerDelete={this.handlerDelete}
+            handleDoneChange={this.handleDoneChange} />
         </div>
       </div>
     );
@@ -117,7 +102,7 @@ class Main extends React.Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    posts: map(state.post.collection, item => item)
+    posts: _.map(state.post.collection, item => item)
   }
 };
 

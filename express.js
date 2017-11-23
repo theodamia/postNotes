@@ -2,7 +2,10 @@ import express from 'express'
 import path from 'path'
 import httpProxy from 'http-proxy'
 import bodyParser from 'body-parser'
+import passport from 'passport'
 import session from 'express-session'
+import auth from './server/db/passport/auth'
+import mongoose from 'mongoose'
 
 var proxy = httpProxy.createProxyServer({
   changeOrigin: true
@@ -10,16 +13,32 @@ var proxy = httpProxy.createProxyServer({
 
 var app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+var store;
 app.use(session({
-  cookieName: 'session',
   secret: '2C44-4D44-WppQ38S',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+  cookie: {
+    httpOnly: false,
+    secure: false,
+    maxAge: ((60 * 1000) * 60)
+  },
+  store: store = new (require('express-sessions')) ({
+    storage: 'mongodb',
+    instance: mongoose,
+    host: 'localhost'
+  }),
   resave: true,
-  saveUninitialized: true,
-  secure: true, // Ensures cookies are only used over HTTPS
-  ephemeral: true // Deletes the cookie when the browser is closed
+  saveUninitialized: false
 }));
+
+// Initialize Passport and restore authentication state, if any, from the
+// session.
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+auth(passport);
 
 var PROD = process.env.NODE_ENV === 'production';
 var PORT = PROD ? process.env.PORT : 3000;
@@ -27,23 +46,34 @@ var publicPath = path.resolve(__dirname, 'public');
 
 app.use(express.static(publicPath));
 
+app.get('/public', (req, res) => {
+  res.render('public/index');
+});
+
 var POSTS_FILE = path.join(__dirname, 'posts.json');
 var USERS_FILE = path.join(__dirname, 'users.json');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
 
 // Additional middleware which will set headers that we need on each request.
 app.use((req, res, next) => {
     // Set permissive CORS header - this allows this server to be used only as
     // an API server in conjunction with something like webpack-dev-server.
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // var allowedOrigins = ['*', 'http://localhost:8080'];
+    // var origin = req.headers.origin;
+    // if(allowedOrigins.indexOf(origin) > -1){
+    //    res.setHeader('Access-Control-Allow-Origin', origin);
+    //  }
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, Accept");
+
+    // Setting the allowing methods.
+    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS, PATCH");
+
+    res.setHeader('Access-Control-Allow-Credentials', true);
 
     // Disable caching so we'll always get the latest comments.
     res.setHeader('Cache-Control', 'no-cache');
-
-    // Setting the allowing methods.
-    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     next();
 });
 
@@ -67,10 +97,6 @@ proxy.on('error', (e) => {
 app.listen(PORT, () => {
   console.log('Express server running on port ' + PORT);
   console.log('Wepback-dev-server running on port 8080');
-});
-
-app.get('/public', (req, res) => {
-  res.render('public/index');
 });
 
 /**
@@ -105,10 +131,21 @@ app.post('/api/users', (req, res) => {
   user.signUp(req, res);
 });
 
-app.post('/api/users/:id/isLogin', (req, res, next) => {
-  user.logIn(req, res, next);
+app.post('/api/users/login', passport.authenticate('local'), (req, res) => {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.json(req.user);
+    // res.json(req.session.passport.user);
 });
 
-app.get('/api/users/:id/isLogin', (req, res) => {
-  user.logOut(req, res);
+app.get('/api/users/logout', (req, res) => {
+  console.log("logging out...");
+  req.logout();
+  req.session.destroy((err) => {
+    req.session = null;
+    res.clearCookie('connect.sid', {path: '/'});
+    // res.redirect('http://localhost:8080/public/');
+    // res.redirect('/');
+    res.sendStatus(401);
+  });
 });

@@ -1,12 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Button from 'react-bootstrap/lib/Button';
+import BButton from 'react-bootstrap/lib/Button';
 
-export default class CButton extends React.Component {
+export default class Button extends React.Component {
   render() {
     const {id, value, title, bsStyle, type, onClick, text} = this.props;
     return (
-      <Button
+      <BButton
         id={id}
         value={value}
         title={title}
@@ -14,7 +12,7 @@ export default class CButton extends React.Component {
         type={type}
         onClick={onClick}>
           {text}
-      </Button>
+      </BButton>
     );
   }
 }

@@ -106,6 +106,7 @@ body {
   font-size: 29px;
   color: #337ab7!important;
   font-weight: bold;
+  text-decoration: none;
 }
 
 #nav-list>li>a {
@@ -170,4 +171,14 @@ body {
 .alert-text {
   color: red;
   font-size: 15px;
+}
+
+.search-box {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-box:focus {
+  border-color: #337ab7;
 }

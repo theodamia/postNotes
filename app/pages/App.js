@@ -1,27 +1,45 @@
 import '../style/css/style.css'
 import '../style/styleJS.js'
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { Nav, NavBar, NavItem } from 'react-bootstrap'
 import { hashHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { getState, resetLocalStore } from 'redux-localstore'
-import store from '../store/index.js'
+// import { getState, resetLocalStore } from 'redux-localstore'
+// import store from '../store/index.js'
 import Navigation from '../components/navigation/Navigation.js'
+import { logOut } from '../actions/post'
 
-const state = getState();
+// const state = getState();
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.handleLogOut = this.handleLogOut.bind(this);
   }
   handleLogOut() {
-    resetLocalStore();
-    window.location.reload();
+    // resetLocalStore();
+    // window.location.reload();
+    axios({
+      method: 'get',
+      url: 'http://localhost:3000/api/users/logout',
+      withCredentials: true
+    })
+    .then(response => {
+      console.log(response.data);
+      console.log(response);
+      console.log(this.props.user);
+      console.log("mplampla");
+      // hashHistory.push('/');
+    })
+    .catch((error) => {
+      console.log(error);
+      console.log("mplampla");
+      console.log(this.props.user);
+      this.props.logOut();
+    });
   }
   render() {
+    console.log(document.cookie);
     const props = {
       user: this.props.user
     }
@@ -43,4 +61,13 @@ const mapStateToProps = (state, props) => {
     user: state.user.auth
   }
 };
-export default connect(mapStateToProps)(App);
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logOut: () => {
+      dispatch(logOut());
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

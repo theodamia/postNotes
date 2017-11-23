@@ -1,5 +1,11 @@
 import mongoose from 'mongoose'
+import passport from 'passport'
 var User = require('../models/user.js');
+import bCrypt  from 'bcrypt-nodejs'
+
+var createHash = function(password) {
+ return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
 
 module.exports = {
 
@@ -7,7 +13,7 @@ module.exports = {
     const user = new User({
       id: req.body._id,
       email: req.body.email,
-      password: req.body.password,
+      password: createHash(req.body.password),
       isRegister: req.body.isRegister,
       isLogin: req.body.isLogin
     });
@@ -27,27 +33,5 @@ module.exports = {
         })
       }
     });
-  },
-
-  logIn:(req, res) => {
-    const query = { email: req.body.email, password: req.body.password };
-    User.findOne(query, (err, user) => {
-      if (err) {
-        return res.status(500).send('Something didnt go as planned.');
-      }
-      if (!user) {
-        return res.status(401).send('Email or password incorrect.');
-      } else {
-        req.session.user = user;
-        // res.redirect('http://localhost:8080/public/');
-        res.json(user);
-        // console.log("User: %j", user);
-        console.log(req.session.user);
-      }
-    });
-  },
-
-  logOut: (req, res) => {
-    req.session.destroy();
   }
 };

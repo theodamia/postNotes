@@ -1,13 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Router, hashHistory } from 'react-router'
-import { createStore, combineReducers } from 'redux'
+import { Router, hashHistory, browserHistory } from 'react-router'
 import { Provider } from 'react-redux'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import routes from './routes'
 import store from './store/index'
 
-// console.log(store);
 ReactDOM.render((
   <Provider store={store}>
     <Router history={hashHistory} routes={routes} />
