@@ -1,7 +1,7 @@
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import thunk from 'redux-thunk'
 import { hashHistory } from 'react-router'
-import storeSynchronize from 'redux-localstore'
 import PostReducer from '../reducers/post'
 import UserReducer from '../reducers/user'
 
@@ -10,9 +10,11 @@ const store = createStore(
     post: PostReducer,
     user: UserReducer
   }),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  compose(
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
+
 )
 
 export default store;
-
-// storeSynchronize(store)

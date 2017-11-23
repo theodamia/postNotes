@@ -1,0 +1,173 @@
+$sm: 15px;
+$md: 30px;
+$blue-color: #337ab7;
+$bg-color: #eee;
+$alert-color: red;
+$black-color: #000;
+$white-color: #fff;
+$assetsPath: "/app/assets/";
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+body {
+  background-color: $bg-color;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+textarea {
+  resize: none;
+  overflow: hidden;
+  width: 500px !important;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sm-margintop { margin-top: $sm; }
+
+.md-margintop { margin-top: $md; }
+
+.sm-marginbot { margin-bottom: $sm; }
+
+.md-marginbot { margin-bottom: $md; }
+
+.ta-center { text-align: center; }
+
+.ta-left { text-align: left; }
+
+.ta-right { text-align: right }
+
+#content {
+  position: relative;
+  z-index: 1000;
+}
+
+.post-form {
+  text-align: center;
+  margin-bottom: $md;
+}
+
+.list span {
+  display: flex;
+  justify-content: space-between;
+}
+
+.npt-text {
+  border: 0;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.icon {
+  font-size: 33px;
+  border: 3px solid black;
+  border-radius: 5px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.icon-delete {
+  @extend .icon;
+  margin-left: 10px;
+}
+
+.nav-bar {
+  background-color: $bg-color;
+  border: none;
+
+    .brand {
+      font-size: 29px;
+      color: $blue-color !important;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    li {
+      a {
+        line-height: 27px;
+        font-size: 19px;
+        background-color: $bg-color !important;
+        color: $black-color !important;
+      }
+    }
+}
+
+.login-box {
+  width: 420px;
+  margin: 0 auto;
+  background-color: #f5f5f6;
+  border: 2px solid #e3e3e3;
+  border-radius: 4px;
+
+    h1 {
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 24px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .login-text {
+      padding: 12px 8px;
+      font-size: 16px;
+      text-align: center;
+
+        a {
+          text-decoration: none;
+          font-weight: 800;
+          font-size: 18px;
+          cursor: pointer;
+        }
+    }
+}
+
+.login-form {
+  padding: 16px 12px;
+  border-bottom: 2px solid #e3e3e3;
+}
+
+.login-field {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #c3c8ce;
+  border-radius: 4px;
+  width: 100%;
+  height: 50px;
+  background-color: #fff;
+  color: #333f48;
+  margin-bottom: 0.75rem;
+}
+
+.btn-register {
+  width: 100%;
+  height: 45px;
+  font-size: 18px;
+}
+
+.alert-text {
+  color: $alert-color;
+  font-size: 15px;
+}
+
+.search-box {
+  width: 100%;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+.search-box:focus {
+  border-color: $blue-color;
+}

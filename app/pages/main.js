@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { storePost, fetchAllPost, deletePost } from '../actions/post'
+import { storePostAsync, fetchAllPostAsync, deletePostAsync, updatePostTest, updatePostDone } from '../actions/post'
 
 import PostList from '../components/list/PostList.js'
 import PostForm from '../components/form/PostForm.js'
@@ -12,65 +12,29 @@ class Main extends React.Component {
       data: []
     };
 
-    this.loadPostsFromServer  = this.loadPostsFromServer.bind(this);
     this.handlePostSubmit     = this.handlePostSubmit.bind(this);
     this.handlerDelete        = this.handlerDelete.bind(this);
-    this.componentDidMount    = this.componentDidMount.bind(this);
     this.handleDoneChange     = this.handleDoneChange.bind(this);
     this.handleTextUpdate     = this.handleTextUpdate.bind(this);
     this.filterPosts          = this.filterPosts.bind(this);
   }
-  loadPostsFromServer() {
-    axios.get('http://localhost:3000/api/posts')
-    .then(response => {
-      this.props.fetchAllPost(response.data)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
   handlePostSubmit(post) {
-    axios.post('http://localhost:3000/api/posts', {text: post.text})
-    .then(response => {
-      this.props.storePost(response.data)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    this.props.storePostAsync(post);
   }
   handlerDelete(post) {
-    axios.delete('http://localhost:3000/api/posts', {data: {_id: post._id}})
-    .then(response => {
-      this.props.deletePost(response.data)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    this.props.deletePostAsync(post);
   }
   handleDoneChange(post) {
-    axios.post('http://localhost:3000/api/posts/:id/done', _.omit(post))
-    .then(response => {
-      this.props.storePost(response.data)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    this.props.updatePostDone(post);
   }
   handleTextUpdate(post) {
-    axios.post('http://localhost:3000/api/posts/:id/text', _.omit(post))
-    .then(response => {
-      this.props.storePost(response.data)
-      this.loadPostsFromServer();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    this.props.updatePostTest(post);
   }
   filterPosts(done) {
     return this.props.posts.filter(post => post.done === done);
   }
   componentDidMount() {
-    this.loadPostsFromServer();
+    this.props.fetchAllPostAsync();
   }
   render() {
     var postsDone = this.filterPosts(true);
@@ -100,24 +64,16 @@ class Main extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
-  return {
-    posts: _.map(state.post.collection, item => item)
-  }
-};
+const mapStateToProps = (state, props) => ({
+  posts: _.map(state.post.collection, item => item)
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    storePost: (post) => {
-      dispatch(storePost(post));
-    },
-    fetchAllPost: (post) => {
-      dispatch(fetchAllPost(post));
-    },
-    deletePost: (post) => {
-      dispatch(deletePost(post));
-    }
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+    storePostAsync: (post) => dispatch(storePostAsync(post)),
+    fetchAllPostAsync: () => dispatch(fetchAllPostAsync()),
+    deletePostAsync: (post) =>dispatch(deletePostAsync(post)),
+    updatePostTest: (post) => dispatch(updatePostTest(post)),
+    updatePostDone: (post) => dispatch(updatePostDone(post))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -30,8 +30,8 @@ export default class FormBox extends React.Component {
   }
   render() {
     return (
-      <div className="col-lg-12">
-        <div className="ta-center md-margintop md-marginbot">
+      <div className="col-lg-">
+        <div className="post-form">
           <form onSubmit={this.handleSubmit}>
             <FormGroup>
               <FormControl

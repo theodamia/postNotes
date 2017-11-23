@@ -7,17 +7,17 @@ export default class Navigation extends React.Component {
   render() {
     return (
       <div className="col-lg-12 md-margintop">
-        <NavBar id="nav-bar">
+        <NavBar className="nav-bar">
           <NavBar.Header>
             <NavBar.Brand>
-              <a id="nav-brand" href="./">Post Notes</a>
+              <Link className="brand" to="/">Post Notes</Link>
             </NavBar.Brand>
           </NavBar.Header>
           <Nav id="nav-list">
             <LinkContainer
               className="nav-item"
               onClick={() => {_.isEmpty(this.props.user) ? '' : this.props.handleLogOut()}}
-              to={_.isEmpty(this.props.user) ? '/RegisterOrLogin' : '/'}>
+              to={_.isEmpty(this.props.user) ? '/RegisterOrLogin' : '/'} >
                 <NavItem>{_.isEmpty(this.props.user) ? 'Login' : 'Logout ' + this.props.user.email}</NavItem>
             </LinkContainer>
             <NavItem href="/about">About</NavItem>

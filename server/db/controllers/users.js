@@ -13,9 +13,7 @@ module.exports = {
     const user = new User({
       id: req.body._id,
       email: req.body.email,
-      password: createHash(req.body.password),
-      isRegister: req.body.isRegister,
-      isLogin: req.body.isLogin
+      password: createHash(req.body.password)
     });
 
     User.findOne({ email: req.body.email }, (findErr, existingUser) => {

@@ -1,6 +1,6 @@
 import { hashHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { signUp, logIn } from '../actions/user'
+import { signUpAsync, logInAsync } from '../actions/user'
 
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
 import Button from '../components/button/Button'
@@ -10,13 +10,11 @@ class RegisterOrLogin extends React.Component {
     super(props);
 
     this.state = {
-      data: [],
       email: '',
       password: '',
-      isRegister: false,
-      isLogin: false,
       registerOrLogin: false,
-      userExistText: false
+      userExist: false,
+      wrongUser: false
     };
 
     this.handleEmailChange    = this.handleEmailChange.bind(this);
@@ -44,9 +42,7 @@ class RegisterOrLogin extends React.Component {
     if(this.state.registerOrLogin) {
       this.handleUserRegister({
         email: email,
-        password: password,
-        isRegister: true,
-        isLogin: true
+        password: password
       });
     } else {
       this.handleLogIn({
@@ -57,38 +53,23 @@ class RegisterOrLogin extends React.Component {
 
     this.setState({
       email: '',
-      password: '',
-      isRegister: false,
-      isLogin: false
+      password: ''
     });
   }
   handleUserRegister(user) {
-    axios.post('http://localhost:3000/api/users', {email: user.email, password: user.password})
-    .then(response => {
-      this.props.signUp(response.data)
-      // hashHistory.push('public/#/user=' + response.data.email);
-    })
-    .catch(function (error) {
-      console.log(error);
+    var that = this;
+    this.props.signUpAsync(user).catch(function (error) {
+      if(error.response.status == '409') {
+        that.setState({userExist: true});
+      }
     });
   }
   handleLogIn(user) {
-    axios({
-      method: 'post',
-      url: 'http://localhost:3000/api/users/login',
-      withCredentials: true,
-      data: {
-        email: user.email,
-        password: user.password
+    var that = this;
+    this.props.logInAsync(user).catch(error => {
+      if(error.response.status == '401') {
+        that.setState({wrongUser: true});
       }
-    })
-    .then(response => {
-      this.props.logIn(response.data);
-      console.log(response.data);
-      hashHistory.push('/?user=' + response.data.email + '/');
-    })
-    .catch(function (error) {
-      console.log(error);
     });
   }
   render() {
@@ -101,7 +82,7 @@ class RegisterOrLogin extends React.Component {
             <a onClick={() => this.setState({registerOrLogin: !this.state.registerOrLogin})}>{this.state.registerOrLogin ? 'Login now.' : 'Register.'}</a>
           </div>
           <div className="login-form">
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} >
               <FormGroup>
                 <FormControl
                   className="login-field"
@@ -115,9 +96,12 @@ class RegisterOrLogin extends React.Component {
                   placeholder="Enter password"
                   value={this.state.password}
                   onChange={this.handlePasswordChange}/>
-                <ControlLabel className="alert-text">{this.state.userExistText ? 'User already exist!!' : '' }</ControlLabel>
+                <ControlLabel className="alert-text">
+                  {this.state.userExist ? 'User already exist!' : '' }
+                  {this.state.wrongUser ? 'Wrong username or password!' : ''}
+                </ControlLabel>
                 <div>
-                  <Button bsStyle="success" id="btn-register" type="submit" text={this.state.registerOrLogin ? 'Register' : 'Login'} />
+                  <Button bsStyle="success" className="btn-register" type="submit" text={this.state.registerOrLogin ? 'Register' : 'Login'} />
                 </div>
               </FormGroup>
             </form>
@@ -128,21 +112,13 @@ class RegisterOrLogin extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
-  return {
-    users: _.map(state.user.collection, item => item)
-  }
-};
+const mapStateToProps = (state, props) => ({
+    users: _.map(state.user.auth, item => item)
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signUp: (user) => {
-      dispatch(signUp(user));
-    },
-    logIn: (user) => {
-      dispatch(logIn(user));
-    }
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+  signUpAsync: (user) => dispatch(signUpAsync(user)),
+  logInAsync: (user) => dispatch(logInAsync(user))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterOrLogin);
