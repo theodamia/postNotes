@@ -57,21 +57,11 @@ var USERS_FILE = path.join(__dirname, 'users.json');
 app.use((req, res, next) => {
     // Set permissive CORS header - this allows this server to be used only as
     // an API server in conjunction with something like webpack-dev-server.
-    // res.setHeader('Access-Control-Allow-Origin', '*');
-    // var allowedOrigins = ['*', 'http://localhost:8080'];
-    // var origin = req.headers.origin;
-    // if(allowedOrigins.indexOf(origin) > -1){
-    //    res.setHeader('Access-Control-Allow-Origin', origin);
-    //  }
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
-
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, Accept");
-
     // Setting the allowing methods.
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS, PATCH");
-
     res.setHeader('Access-Control-Allow-Credentials', true);
-
     // Disable caching so we'll always get the latest comments.
     res.setHeader('Cache-Control', 'no-cache');
     next();
@@ -135,17 +125,14 @@ app.post('/api/users/login', passport.authenticate('local'), (req, res) => {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
     res.json(req.user);
-    // res.json(req.session.passport.user);
 });
 
 app.get('/api/users/logout', (req, res) => {
-  console.log("logging out...");
+  console.log("Logged out");
   req.logout();
   req.session.destroy((err) => {
     req.session = null;
     res.clearCookie('connect.sid', {path: '/'});
-    // res.redirect('http://localhost:8080/public/');
-    // res.redirect('/');
-    res.sendStatus(401);
+    res.sendStatus(200, 'success logout');
   });
 });

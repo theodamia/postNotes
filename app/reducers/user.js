@@ -1,12 +1,9 @@
 import { compineReducers } from 'react-redux'
-import { defineState } from 'redux-localstore'
 import * as types from '../constants/index'
 
-const defaultState = {
+const initialState = {
   auth: {}
 }
-
-const initialState = defineState(defaultState)('user')
 
 const user = (
   state = initialState,
@@ -18,17 +15,14 @@ const user = (
         ...state,
        auth: action.payload
       };
-    case types.LOGIN_REQUEST_SUCCESS:
+    case types.LOGIN_REQUEST:
       return {
          ...state,
         auth: action.payload
       };
     case types.LOG_OUT_REQUEST:
       return {
-        //  ...state,
-        // auth: action.payload
         auth: action.payload === null
-        // return action.payload === null ? initialState : state;
       };
     default:
       return state;

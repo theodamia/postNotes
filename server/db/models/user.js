@@ -4,9 +4,7 @@ import bCrypt  from 'bcrypt-nodejs'
 const userSchema = new mongoose.Schema({
   id: String,
   email: String,
-  password: String,
-  isLogin: Boolean,
-  isRegister: Boolean
+  password: String
 });
 
 // generating a hash
