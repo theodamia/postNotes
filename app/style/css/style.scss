@@ -1,10 +1,16 @@
 $sm: 15px;
 $md: 30px;
-$blue-color: #337ab7;
+
 $bg-color: #eee;
-$alert-color: red;
-$black-color: #000;
-$white-color: #fff;
+$blue: #337ab7;
+$light-blue: #d9edf7;
+$grey: #ddd;
+$red: #ff0000;
+$black: #000;
+$white: #fff;
+$light-red:#a94442;
+$yellow:#f4e597;
+
 $assetsPath: "/app/assets/";
 
 h1, h2, h3, h4, h5, h6 {
@@ -19,12 +25,6 @@ ul {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-textarea {
-  resize: none;
-  overflow: hidden;
-  width: 500px !important;
 }
 
 .center {
@@ -51,25 +51,101 @@ textarea {
   z-index: 1000;
 }
 
+.alert-text {
+  color: $red;
+  font-size: 15px;
+}
+
 .post-form {
   text-align: center;
   margin-bottom: $md;
+
+  .post-title {
+    @extend .center;
+    width: 500px;
+  }
+
+  .title-alert {
+    @extend .alert-text;
+    width: 500px;
+    text-align: left;
+    margin: 0;
+  }
+
+  .post-text {
+    @extend .center;
+    resize: none;
+    overflow: hidden;
+    width: 500px;
+    height: 100px !important;
+  }
 }
 
-.list span {
-  display: flex;
-  justify-content: space-between;
+.list-item {
+  padding: 0;
+  border: 2px solid $light-blue;
+
+  .list-item-padding {
+    padding: 10px 15px;
+  }
+
+  .list-item-title {
+    @extend .list-item-padding;
+    background-color: $light-blue;
+    color: $blue;
+
+    .npt-title {
+      background-color: inherit;
+      border: 0;
+    }
+  }
+
+  .list-item-text {
+    @extend .list-item-padding;
+
+    .npt-text {
+      border: 0;
+      margin-right: 10px;
+    }
+  }
+
+  .list-item-icons {
+    @extend .list-item-padding;
+
+    .dropdown {
+      margin: 0 0 4px 5px;
+
+      .color-palette {
+        float: right;
+        width: 10px;
+        height: 10px;
+        margin-top: 5px;
+      }
+    }
+  }
 }
 
-.npt-text {
-  border: 0;
-  width: 100%;
-  margin-right: 10px;
+// Status
+.default {
+  @extend .color-palette;
+  background-color: $light-blue;
+}
+
+.important {
+  @extend .color-palette;
+  background-color: $light-red !important;
+  color: $white !important;
+}
+
+.ongoing {
+  @extend .color-palette;
+  background-color: $yellow !important;
+  color: $black !important;
 }
 
 .icon {
-  font-size: 33px;
-  border: 3px solid black;
+  font-size: 22px;
+  border: 1px solid black;
   border-radius: 5px;
   padding: 4px 0;
   cursor: pointer;
@@ -86,7 +162,7 @@ textarea {
 
     .brand {
       font-size: 29px;
-      color: $blue-color !important;
+      color: $blue !important;
       font-weight: bold;
       text-decoration: none;
     }
@@ -96,7 +172,7 @@ textarea {
         line-height: 27px;
         font-size: 19px;
         background-color: $bg-color !important;
-        color: $black-color !important;
+        color: $black !important;
       }
     }
 }
@@ -144,7 +220,7 @@ textarea {
   border-radius: 4px;
   width: 100%;
   height: 50px;
-  background-color: #fff;
+  background-color: $white;
   color: #333f48;
   margin-bottom: 0.75rem;
 }
@@ -153,11 +229,6 @@ textarea {
   width: 100%;
   height: 45px;
   font-size: 18px;
-}
-
-.alert-text {
-  color: $alert-color;
-  font-size: 15px;
 }
 
 .search-box {
@@ -169,5 +240,5 @@ textarea {
 }
 
 .search-box:focus {
-  border-color: $blue-color;
+  border-color: $blue;
 }

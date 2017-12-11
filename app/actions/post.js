@@ -9,7 +9,7 @@ export function storePost(data) {
 
 export function storePostAsync(post) {
   return dispatch => {
-    return axios.post('http://localhost:3000/api/posts', {text: post.text})
+    return axios.post('http://localhost:3000/api/posts', { title: post.title, text: post.text, userID: post.userID })
     .then(response => {
        dispatch(storePost(response.data));
     })
@@ -19,9 +19,33 @@ export function storePostAsync(post) {
   }
 }
 
-export function updatePostTest(post) {
+export function updatePostTitle(post) {
+  return dispatch => {
+    return axios.post('http://localhost:3000/api/posts/:id/title', _.omit(post))
+    .then(response => {
+      dispatch(storePost(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+}
+
+export function updatePostText(post) {
   return dispatch => {
     return axios.post('http://localhost:3000/api/posts/:id/text', _.omit(post))
+    .then(response => {
+      dispatch(storePost(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+}
+
+export function updatePostStatus(post) {
+  return dispatch => {
+    return axios.post('http://localhost:3000/api/posts/:id/status', _.omit(post))
     .then(response => {
       dispatch(storePost(response.data));
     })
