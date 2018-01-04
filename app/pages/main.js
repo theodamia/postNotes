@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { storePostAsync, fetchAllPostAsync, deletePostAsync,
-  updatePostTitle, updatePostText, updatePostDone, updatePostStatus } from '../actions/post'
+  updatePostTitle, updatePostText, updatePostStatus } from '../actions/post'
 
 import PostList from '../components/list/PostList.js'
 import PostForm from '../components/form/PostForm.js'
@@ -18,7 +18,6 @@ class Main extends React.Component {
     this.handleTextUpdate     = this.handleTextUpdate.bind(this);
     this.handleStatusUpdate   = this.handleStatusUpdate.bind(this);
     this.handlerDelete        = this.handlerDelete.bind(this);
-    this.handleDoneChange     = this.handleDoneChange.bind(this);
     this.filterPosts          = this.filterPosts.bind(this);
   }
   handlePostSubmit(post) {
@@ -41,18 +40,19 @@ class Main extends React.Component {
   handlerDelete(post) {
     this.props.deletePostAsync(post);
   }
-  handleDoneChange(post) {
-    this.props.updatePostDone(post);
-  }
-  filterPosts(done) {
-    return this.props.posts.filter(post => post.done === done);
+  filterPosts(status) {
+    if(status === "completed") {
+      return this.props.posts.filter(post => post.status === "completed");
+    } else {
+      return this.props.posts.filter(post => post.status !== "completed");
+    }
   }
   componentDidMount() {
     this.props.fetchAllPostAsync();
   }
   render() {
-    var postsDone = this.filterPosts(true);
-    var postsUndone = this.filterPosts(false);
+    var completedPosts = this.filterPosts("completed");
+    var uncompletedPosts = this.filterPosts("uncompleted");
 
     return (
       <div className="col-lg-12">
@@ -61,21 +61,21 @@ class Main extends React.Component {
         </div>
         <div className="row">
           <PostList
-            done={false}
-            posts={postsUndone}
+            completed={false}
+            posts={uncompletedPosts}
             onTitleUpdate={this.handleTitleUpdate}
             onTextUpdate={this.handleTextUpdate}
             onStatusUpdate={this.handleStatusUpdate}
             handlerDelete={this.handlerDelete}
-            handleDoneChange={this.handleDoneChange}
           />
           <PostList
-            done={true}
-            posts={postsDone}
+            completed={true}
+            posts={completedPosts}
             onTitleUpdate={this.handleTitleUpdate}
             onTextUpdate={this.handleTextUpdate}
+            onStatusUpdate={this.handleStatusUpdate}
             handlerDelete={this.handlerDelete}
-            handleDoneChange={this.handleDoneChange} />
+          />
         </div>
       </div>
     );
@@ -87,13 +87,12 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    storePostAsync: (post) => dispatch(storePostAsync(post)),
-    fetchAllPostAsync: () => dispatch(fetchAllPostAsync()),
-    deletePostAsync: (post) =>dispatch(deletePostAsync(post)),
-    updatePostTitle: (post) => dispatch(updatePostTitle(post)),
-    updatePostText: (post) => dispatch(updatePostText(post)),
-    updatePostDone: (post) => dispatch(updatePostDone(post)),
-    updatePostStatus: (post) => dispatch(updatePostStatus(post))
+  storePostAsync: (post) => dispatch(storePostAsync(post)),
+  fetchAllPostAsync: () => dispatch(fetchAllPostAsync()),
+  updatePostTitle: (post) => dispatch(updatePostTitle(post)),
+  updatePostText: (post) => dispatch(updatePostText(post)),
+  updatePostStatus: (post) => dispatch(updatePostStatus(post)),
+  deletePostAsync: (post) =>dispatch(deletePostAsync(post))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

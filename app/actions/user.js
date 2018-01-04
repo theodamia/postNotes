@@ -10,7 +10,7 @@ export function signUp(data) {
 
 export function signUpAsync(user) {
   return dispath => {
-    return axios.post('http://localhost:3000/api/users', {email: user.email, password: user.password})
+     axios.post('http://localhost:3000/api/users', {email: user.email, password: user.password})
     .then(response => {
       dispath(signUp(response.data));
       hashHistory.push('/?user=' + response.data.email + '/');
@@ -51,7 +51,7 @@ export function logOut() {
 
 export function logOutAsync() {
   return dispatch => {
-    return axios({
+    axios({
       method: 'get',
       url: 'http://localhost:3000/api/users/logout',
       withCredentials: true

@@ -6,7 +6,7 @@ export default class SearchItem extends React.Component {
     return (
       <ListGroupItem>
           <input
-            className="search-box"
+            className="plist__search"
             type="text"
             placeholder="  Search note..."
             onChange={onChange}/>

@@ -17,17 +17,11 @@ export default class PostList extends React.Component {
     this.onStatusChange     = this.onStatusChange.bind(this);
     this.filterSearchValue  = this.filterSearchValue.bind(this);
   }
-  handleBlur(e, kind) {
+  handleBlur(e, _id, kind) {
     e.preventDefault();
-
-    var _id = e.target.getAttribute('data-id');
 
     if(kind == "text") {
       var text = e.target.value.trim();
-
-      if(!text) {
-        return;
-      }
 
       this.props.onTextUpdate({
         _id: _id,
@@ -35,14 +29,18 @@ export default class PostList extends React.Component {
       });
     } else if (kind == "title") {
       var title = e.target.value.trim();
+
+      if(!title) {
+        return;
+      }
+
       this.props.onTitleUpdate({
         _id: _id,
         title: title
       });
     }
   }
-  onStatusChange(e, _id, status) {
-    e.preventDefault();
+  onStatusChange(_id, status) {
     this.props.onStatusUpdate({
       _id: _id,
       status: status
@@ -58,27 +56,28 @@ export default class PostList extends React.Component {
     this.setState({searchValue: searchValue});
   }
   filterSearchValue() {
-    return this.props.posts.filter(post => _.lowerCase(post.text).includes(_.lowerCase(this.state.searchValue)));
+    return this.props.posts.filter(post => _.lowerCase(post.title).includes(_.lowerCase(this.state.searchValue)));
   }
   render() {
     return (
-      <div className="post-list col-lg-6">
-        <h3 className="sm-marginbot">{this.props.done ? 'Completed Notes' : 'Notes List'}</h3>
-        <ListGroup className="list">
-          <Search onChange={this.onSearchChange} />
-          {this.filterSearchValue().map(post => (
-            <Post
-              key={post._id}
-              post={post}
-              handleBlur={this.handleBlur}
-              handleKeyDown={this.handleKeyDown}
-              onStatusChange={this.onStatusChange}
-              handleDoneChange={this.props.handleDoneChange}
-              handlerDelete={this.props.handlerDelete}
-              checkText={post.text ? true : false}
-            />
-          ))}
-        </ListGroup>
+      <div className="col-lg-6">
+        <section className="plist">
+          <h3 className="sm-marginbot">{this.props.completed ? 'Completed Notes' : 'Notes List'}</h3>
+          <ListGroup>
+            <Search onChange={this.onSearchChange} />
+            {this.filterSearchValue().map(post => (
+              <Post
+                key={post._id}
+                post={post}
+                handleBlur={this.handleBlur}
+                handleKeyDown={this.handleKeyDown}
+                onStatusChange={this.onStatusChange}
+                handlerDelete={this.props.handlerDelete}
+                checkText={post.text ? true : false}
+              />
+            ))}
+          </ListGroup>
+      </section>
       </div>
     );
   }

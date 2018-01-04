@@ -103,14 +103,6 @@ app.post('/api/posts', (req, res) => {
   post.insert(req, res);
 });
 
-app.post('/api/posts/:id/done', (req, res) => {
-  post.done(req, res);
-});
-
-app.post('/api/posts/:id/status', (req, res) => {
-  post.statusUpdate(req, res);
-});
-
 app.post('/api/posts/:id/title', (req, res) => {
   post.titleUpdate(req, res);
 });
@@ -119,12 +111,16 @@ app.post('/api/posts/:id/text', (req, res) => {
   post.textUpdate(req, res);
 });
 
+app.post('/api/posts/:id/status', (req, res) => {
+  post.statusUpdate(req, res);
+});
+
 app.delete('/api/posts', (req, res) => {
   post.delete(req, res);
 });
 
 /**
-* User API
+* Users API
 */
 var user = require('./server/db/controllers/users.js');
 app.post('/api/users', (req, res) => {

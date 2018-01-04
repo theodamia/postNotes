@@ -1,30 +1,17 @@
-$sm: 15px;
-$md: 30px;
+@import "variables.scss";
 
-$bg-color: #eee;
-$blue: #337ab7;
-$light-blue: #d9edf7;
-$grey: #ddd;
-$red: #ff0000;
-$black: #000;
-$white: #fff;
-$light-red:#a94442;
-$yellow:#f4e597;
+/*------------------------------------*\
+  #General
+\*------------------------------------*/
 
-$assetsPath: "/app/assets/";
+h1, h2, h3, h4, h5, h6 {  margin: 0; }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-}
-
-body {
-  background-color: $bg-color;
-}
+body { background-color: $bg-color; }
 
 ul {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin:   0;
+  padding:  0;
 }
 
 .center {
@@ -40,12 +27,6 @@ ul {
 
 .md-marginbot { margin-bottom: $md; }
 
-.ta-center { text-align: center; }
-
-.ta-left { text-align: left; }
-
-.ta-right { text-align: right }
-
 #content {
   position: relative;
   z-index: 1000;
@@ -56,132 +37,181 @@ ul {
   font-size: 15px;
 }
 
-.post-form {
+/*------------------------------------*\
+  #Header
+\*------------------------------------*/
+
+#header {
+  background-color: $bg-color;
+  border: none;
+
+    #header__brand {
+      font-size: 29px;
+      color: $blue;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .header__list-item {
+      a {
+        line-height: 27px;
+        font-size: 19px;
+        background-color: $bg-color;
+        color: $black;
+      }
+    }
+}
+
+/*------------------------------------*\
+  #Post Form
+\*------------------------------------*/
+
+#pform {
   text-align: center;
   margin-bottom: $md;
 
-  .post-title {
+  .pform__title {
     @extend .center;
     width: 500px;
   }
 
-  .title-alert {
+  .pform__alert {
     @extend .alert-text;
     width: 500px;
     text-align: left;
     margin: 0;
   }
 
-  .post-text {
+  .pform__text {
     @extend .center;
     resize: none;
     overflow: hidden;
     width: 500px;
-    height: 100px !important;
+    height: 100px;
   }
 }
 
-.list-item {
-  padding: 0;
-  border: 2px solid $light-blue;
+/*------------------------------------*\
+  #Post List
+\*------------------------------------*/
 
-  .list-item-padding {
+.plist__search {
+  width: 100%;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+.plist__search:focus {
+  border-color: $blue;
+}
+
+.plist__item {
+  padding: 0;
+  border: 2px solid $blue-light;
+
+  .plist__item--padding {
     padding: 10px 15px;
   }
 
-  .list-item-title {
-    @extend .list-item-padding;
-    background-color: $light-blue;
+  .plist__item-title {
+    @extend .plist__item--padding ;
+    background-color: $blue-light;
     color: $blue;
 
-    .npt-title {
-      background-color: inherit;
+    input {
+      width: 100%;
       border: 0;
+      background-color: inherit;
     }
   }
 
-  .list-item-text {
-    @extend .list-item-padding;
+  .plist__item-text {
+    @extend .plist__item--padding ;
 
-    .npt-text {
+    input {
+      width: 100%;
       border: 0;
       margin-right: 10px;
     }
   }
 
-  .list-item-icons {
-    @extend .list-item-padding;
+  .plist__item-icons {
+    @extend .plist__item--padding ;
 
     .dropdown {
-      margin: 0 0 4px 5px;
+      margin-bottom: 4px;
 
-      .color-palette {
+      .dropdown__palette {
         float: right;
         width: 10px;
         height: 10px;
         margin-top: 5px;
+        &--default {
+          background-color: $blue-light;
+        }
+        &--important {
+          background-color: $light-red;
+        }
+        &--ongoing {
+          background-color: $yellow;
+        }
+        &--completed {
+          background-color: $green;
+        }
       }
     }
   }
 }
 
-// Status
-.default {
-  @extend .color-palette;
-  background-color: $light-blue;
+// Post Status
+.plist__item--default {
+  .plist__item-title {
+    background-color: $blue-light;
+  }
 }
 
-.important {
-  @extend .color-palette;
-  background-color: $light-red !important;
-  color: $white !important;
+.plist__item--important {
+  .plist__item-title {
+    background-color: $light-red ;
+    color: $white;
+  }
 }
 
-.ongoing {
-  @extend .color-palette;
-  background-color: $yellow !important;
-  color: $black !important;
+.plist__item--ongoing {
+  .plist__item-title {
+    background-color: $yellow;
+    color: $black;
+  }
 }
 
+.plist__item--completed {
+  .plist__item-title {
+      background-color: $green-light;
+      color: $green;
+  }
+}
+
+// Post Icons
 .icon {
   font-size: 22px;
   border: 1px solid black;
   border-radius: 5px;
   padding: 4px 0;
   cursor: pointer;
-}
-
-.icon-delete {
-  @extend .icon;
   margin-left: 10px;
 }
 
-.nav-bar {
-  background-color: $bg-color;
-  border: none;
+/*------------------------------------*\
+  #RegisterOrLogin
+\*------------------------------------*/
 
-    .brand {
-      font-size: 29px;
-      color: $blue !important;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    li {
-      a {
-        line-height: 27px;
-        font-size: 19px;
-        background-color: $bg-color !important;
-        color: $black !important;
-      }
-    }
-}
-
-.login-box {
+.login {
   width: 420px;
   margin: 0 auto;
-  background-color: #f5f5f6;
-  border: 2px solid #e3e3e3;
+  background-color: $white;
+  border: 2px solid $grey;
   border-radius: 4px;
 
     h1 {
@@ -192,7 +222,7 @@ ul {
       text-align: center;
     }
 
-    .login-text {
+    .login__text {
       padding: 12px 8px;
       font-size: 16px;
       text-align: center;
@@ -204,41 +234,27 @@ ul {
           cursor: pointer;
         }
     }
-}
 
-.login-form {
-  padding: 16px 12px;
-  border-bottom: 2px solid #e3e3e3;
-}
+    .login__form {
+      padding: 16px 12px;
 
-.login-field {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-  padding: 0.75rem 1rem;
-  border: 2px solid #c3c8ce;
-  border-radius: 4px;
-  width: 100%;
-  height: 50px;
-  background-color: $white;
-  color: #333f48;
-  margin-bottom: 0.75rem;
-}
+      input {
+        width: 100%;
+        height: 50px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+        border: 2px solid $grey-dark;
+        border-radius: 4px;
+        background-color: $white;
+      }
 
-.btn-register {
-  width: 100%;
-  height: 45px;
-  font-size: 18px;
-}
-
-.search-box {
-  width: 100%;
-  height: 40px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  padding-left: 10px;
-}
-
-.search-box:focus {
-  border-color: $blue;
+      button[type=submit] {
+        width: 100%;
+        height: 45px;
+        font-size: 18px;
+      }
+    }
 }

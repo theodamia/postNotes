@@ -1,4 +1,4 @@
-import {FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
 import Button from '../button/Button'
 
 export default class FormBox extends React.Component {
@@ -48,23 +48,23 @@ export default class FormBox extends React.Component {
   }
   render() {
     return (
-      <div className="col-lg-">
-        <div className="post-form">
+      <div className="col-lg-12">
+        <section id="pform">
           <form onSubmit={this.handleSubmit}>
             <FormGroup>
               <FormControl
                 type="text"
-                className="post-title"
+                className="pform__title"
                 placeholder="Write a title..."
                 value={this.state.title}
                 onChange={this.handleTitleChange}
                 onKeyDown={this.handleKeyDown}
               />
-              <ControlLabel className="alert-text title-alert">
+              <ControlLabel className="pform__alert">
                 {this.state.checkTitle ? 'You must write a title!' : '' }
               </ControlLabel>
               <FormControl
-                className="post-text"
+                className="pform__text"
                 componentClass="textarea"
                 placeholder="Write a Note..."
                 value={this.state.text}
@@ -76,7 +76,7 @@ export default class FormBox extends React.Component {
               </div>
             </FormGroup>
           </form>
-        </div>
+        </section>
       </div>
     );
   }
