@@ -25,28 +25,19 @@ class App extends React.Component {
           <Navigation {...props} handleLogOut={this.handleLogOut} />
         </header>
         <main className="row">
-          {this.props.children}
+          {React.cloneElement(this.props.children, { ...this.props })}
         </main>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state, props) => {
-  return {
+const mapStateToProps = (state, props) => ({
     user: state.user.auth
-  }
-};
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    logOutAsync: () => {
-      dispatch(logOutAsync());
-    }
-    // logInAsync: (user) => {
-    //   dispatch(logInAsync(user));
-    // }
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+    logOutAsync: () => dispatch(logOutAsync())
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

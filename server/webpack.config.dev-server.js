@@ -34,13 +34,19 @@ module.exports = function () {
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
       'Access-Control-Allow-Credentials': true
     },
-    // Configure hot replacement
-    hot: true,
-    // The rest is terminal configurations
-    quiet: true,
-    noInfo: false,
-    stats: {
-      colors: false
+    devServer: {
+      // Configure hot replacement
+      hot: true,
+      // The rest is terminal configurations
+      quiet: true,
+      noInfo: true,
+      // lazy: true
+      // stats: {
+      //   colors: false,
+      //   assets:false,
+      //   hash: false,
+      //   version: false
+      // }
     }
   });
 

@@ -1,30 +1,17 @@
-$sm: 15px;
-$md: 30px;
-$blue-color: #337ab7;
-$bg-color: #eee;
-$alert-color: red;
-$black-color: #000;
-$white-color: #fff;
-$assetsPath: "/app/assets/";
+@import "variables.scss";
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-}
+/*------------------------------------*\
+  #General
+\*------------------------------------*/
 
-body {
-  background-color: $bg-color;
-}
+h1, h2, h3, h4, h5, h6 {  margin: 0; }
+
+body { background-color: $bg-color; }
 
 ul {
   list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-textarea {
-  resize: none;
-  overflow: hidden;
-  width: 500px !important;
+  margin:   0;
+  padding:  0;
 }
 
 .center {
@@ -40,72 +27,191 @@ textarea {
 
 .md-marginbot { margin-bottom: $md; }
 
-.ta-center { text-align: center; }
-
-.ta-left { text-align: left; }
-
-.ta-right { text-align: right }
-
 #content {
   position: relative;
   z-index: 1000;
 }
 
-.post-form {
-  text-align: center;
-  margin-bottom: $md;
+.alert-text {
+  color: $red;
+  font-size: 15px;
 }
 
-.list span {
-  display: flex;
-  justify-content: space-between;
-}
+/*------------------------------------*\
+  #Header
+\*------------------------------------*/
 
-.npt-text {
-  border: 0;
-  width: 100%;
-  margin-right: 10px;
-}
-
-.icon {
-  font-size: 33px;
-  border: 3px solid black;
-  border-radius: 5px;
-  padding: 4px 0;
-  cursor: pointer;
-}
-
-.icon-delete {
-  @extend .icon;
-  margin-left: 10px;
-}
-
-.nav-bar {
+#header {
   background-color: $bg-color;
   border: none;
 
-    .brand {
+    #header__brand {
       font-size: 29px;
-      color: $blue-color !important;
+      color: $blue;
       font-weight: bold;
       text-decoration: none;
     }
 
-    li {
+    .header__list-item {
       a {
         line-height: 27px;
         font-size: 19px;
-        background-color: $bg-color !important;
-        color: $black-color !important;
+        background-color: $bg-color;
+        color: $black;
       }
     }
 }
 
-.login-box {
+/*------------------------------------*\
+  #Post Form
+\*------------------------------------*/
+
+#pform {
+  text-align: center;
+  margin-bottom: $md;
+
+  .pform__title {
+    @extend .center;
+    width: 500px;
+  }
+
+  .pform__alert {
+    @extend .alert-text;
+    width: 500px;
+    text-align: left;
+    margin: 0;
+  }
+
+  .pform__text {
+    @extend .center;
+    resize: none;
+    overflow: hidden;
+    width: 500px;
+    height: 100px;
+  }
+}
+
+/*------------------------------------*\
+  #Post List
+\*------------------------------------*/
+
+.plist__search {
+  width: 100%;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+.plist__search:focus {
+  border-color: $blue;
+}
+
+.plist__item {
+  padding: 0;
+  border: 2px solid $blue-light;
+
+  .plist__item--padding {
+    padding: 10px 15px;
+  }
+
+  .plist__item-title {
+    @extend .plist__item--padding ;
+    background-color: $blue-light;
+    color: $blue;
+
+    input {
+      width: 100%;
+      border: 0;
+      background-color: inherit;
+    }
+  }
+
+  .plist__item-text {
+    @extend .plist__item--padding ;
+
+    input {
+      width: 100%;
+      border: 0;
+      margin-right: 10px;
+    }
+  }
+
+  .plist__item-icons {
+    @extend .plist__item--padding ;
+
+    .dropdown {
+      margin-bottom: 4px;
+
+      .dropdown__palette {
+        float: right;
+        width: 10px;
+        height: 10px;
+        margin-top: 5px;
+        &--default {
+          background-color: $blue-light;
+        }
+        &--important {
+          background-color: $light-red;
+        }
+        &--ongoing {
+          background-color: $yellow;
+        }
+        &--completed {
+          background-color: $green;
+        }
+      }
+    }
+  }
+}
+
+// Post Status
+.plist__item--default {
+  .plist__item-title {
+    background-color: $blue-light;
+  }
+}
+
+.plist__item--important {
+  .plist__item-title {
+    background-color: $light-red ;
+    color: $white;
+  }
+}
+
+.plist__item--ongoing {
+  .plist__item-title {
+    background-color: $yellow;
+    color: $black;
+  }
+}
+
+.plist__item--completed {
+  .plist__item-title {
+      background-color: $green-light;
+      color: $green;
+  }
+}
+
+// Post Icons
+.icon {
+  font-size: 22px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 4px 0;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/*------------------------------------*\
+  #RegisterOrLogin
+\*------------------------------------*/
+
+.login {
   width: 420px;
   margin: 0 auto;
-  background-color: #f5f5f6;
-  border: 2px solid #e3e3e3;
+  background-color: $white;
+  border: 2px solid $grey;
   border-radius: 4px;
 
     h1 {
@@ -116,7 +222,7 @@ textarea {
       text-align: center;
     }
 
-    .login-text {
+    .login__text {
       padding: 12px 8px;
       font-size: 16px;
       text-align: center;
@@ -128,46 +234,27 @@ textarea {
           cursor: pointer;
         }
     }
-}
 
-.login-form {
-  padding: 16px 12px;
-  border-bottom: 2px solid #e3e3e3;
-}
+    .login__form {
+      padding: 16px 12px;
 
-.login-field {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-  padding: 0.75rem 1rem;
-  border: 2px solid #c3c8ce;
-  border-radius: 4px;
-  width: 100%;
-  height: 50px;
-  background-color: #fff;
-  color: #333f48;
-  margin-bottom: 0.75rem;
-}
+      input {
+        width: 100%;
+        height: 50px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+        border: 2px solid $grey-dark;
+        border-radius: 4px;
+        background-color: $white;
+      }
 
-.btn-register {
-  width: 100%;
-  height: 45px;
-  font-size: 18px;
-}
-
-.alert-text {
-  color: $alert-color;
-  font-size: 15px;
-}
-
-.search-box {
-  width: 100%;
-  height: 40px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  padding-left: 10px;
-}
-
-.search-box:focus {
-  border-color: $blue-color;
+      button[type=submit] {
+        width: 100%;
+        height: 45px;
+        font-size: 18px;
+      }
+    }
 }

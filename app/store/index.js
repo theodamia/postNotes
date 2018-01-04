@@ -1,7 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk'
-import { hashHistory } from 'react-router'
 import PostReducer from '../reducers/post'
 import UserReducer from '../reducers/user'
 

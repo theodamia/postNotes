@@ -90,23 +90,29 @@ app.listen(PORT, () => {
 });
 
 /**
-* Post requests
+* Posts API
 */
 var post = require('./server/db/controllers/posts.js');
+// Get all posts
 app.get('/api/posts', (req, res) => {
   post.all(req, res);
 });
 
+//Insert post
 app.post('/api/posts', (req, res) => {
   post.insert(req, res);
 });
 
-app.post('/api/posts/:id/done', (req, res) => {
-  post.done(req, res);
+app.post('/api/posts/:id/title', (req, res) => {
+  post.titleUpdate(req, res);
 });
 
 app.post('/api/posts/:id/text', (req, res) => {
   post.textUpdate(req, res);
+});
+
+app.post('/api/posts/:id/status', (req, res) => {
+  post.statusUpdate(req, res);
 });
 
 app.delete('/api/posts', (req, res) => {
@@ -114,7 +120,7 @@ app.delete('/api/posts', (req, res) => {
 });
 
 /**
-* User requests
+* Users API
 */
 var user = require('./server/db/controllers/users.js');
 app.post('/api/users', (req, res) => {

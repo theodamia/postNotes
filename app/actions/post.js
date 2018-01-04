@@ -9,7 +9,7 @@ export function storePost(data) {
 
 export function storePostAsync(post) {
   return dispatch => {
-    return axios.post('http://localhost:3000/api/posts', {text: post.text})
+    axios.post('http://localhost:3000/api/posts', { title: post.title, text: post.text, userID: post.userID })
     .then(response => {
        dispatch(storePost(response.data));
     })
@@ -19,9 +19,9 @@ export function storePostAsync(post) {
   }
 }
 
-export function updatePostTest(post) {
+export function updatePostTitle(post) {
   return dispatch => {
-    return axios.post('http://localhost:3000/api/posts/:id/text', _.omit(post))
+    axios.post('http://localhost:3000/api/posts/:id/title', _.omit(post))
     .then(response => {
       dispatch(storePost(response.data));
     })
@@ -31,9 +31,21 @@ export function updatePostTest(post) {
   }
 }
 
-export function updatePostDone(post) {
+export function updatePostText(post) {
   return dispatch => {
-    return axios.post('http://localhost:3000/api/posts/:id/done', _.omit(post))
+     axios.post('http://localhost:3000/api/posts/:id/text', _.omit(post))
+    .then(response => {
+      dispatch(storePost(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+}
+
+export function updatePostStatus(post) {
+  return dispatch => {
+     axios.post('http://localhost:3000/api/posts/:id/status', _.omit(post))
     .then(response => {
       dispatch(storePost(response.data));
     })
@@ -52,7 +64,7 @@ export function fetchAllPost(data) {
 
 export function fetchAllPostAsync() {
   return dispatch => {
-    return axios.get('http://localhost:3000/api/posts')
+     axios.get('http://localhost:3000/api/posts')
     .then(response => {
       dispatch(fetchAllPost(response.data));
     })
@@ -71,7 +83,7 @@ export function deletePost(data) {
 
 export function deletePostAsync(post) {
   return dispatch => {
-    return axios.delete('http://localhost:3000/api/posts', {data: {_id: post._id}})
+    axios.delete('http://localhost:3000/api/posts', {data: {_id: post._id}})
     .then(response => {
       dispatch(deletePost(response.data));
     })

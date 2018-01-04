@@ -75,23 +75,21 @@ class RegisterOrLogin extends React.Component {
   render() {
     return (
       <div className="col-lg-12">
-        <div className="login-box">
+        <section className="login">
           <h1>{this.state.registerOrLogin ? 'Register with Email' : 'Login with Email'}</h1>
-          <div className="login-text">
+          <div className="login__text">
             {this.state.registerOrLogin ? 'Already have an account? ' : 'You need an account? ' }
             <a onClick={() => this.setState({registerOrLogin: !this.state.registerOrLogin})}>{this.state.registerOrLogin ? 'Login now.' : 'Register.'}</a>
           </div>
-          <div className="login-form">
+          <div className="login__form">
             <form onSubmit={this.handleSubmit} >
               <FormGroup>
                 <FormControl
-                  className="login-field"
                   type="email"
                   placeholder="Enter email"
                   value={this.state.email}
                   onChange={this.handleEmailChange}/>
                 <FormControl
-                  className="login-field"
                   type="Password"
                   placeholder="Enter password"
                   value={this.state.password}
@@ -101,12 +99,12 @@ class RegisterOrLogin extends React.Component {
                   {this.state.wrongUser ? 'Wrong username or password!' : ''}
                 </ControlLabel>
                 <div>
-                  <Button bsStyle="success" className="btn-register" type="submit" text={this.state.registerOrLogin ? 'Register' : 'Login'} />
+                  <Button bsStyle="success" type="submit" text={this.state.registerOrLogin ? 'Register' : 'Login'} />
                 </div>
               </FormGroup>
             </form>
           </div>
-        </div>
+        </section>
       </div>
     );
   }
