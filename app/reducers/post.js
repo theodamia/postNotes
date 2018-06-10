@@ -1,5 +1,5 @@
-import { compineReducers } from 'react-redux'
-import * as types from '../constants/index.js'
+import { keyBy, omit } from 'lodash';
+import * as types from '../constants/index';
 
 const initialState = {
   collection: {}
@@ -19,11 +19,11 @@ const post = (
       };
     case types.FETCH_ALL_POST:
       return {
-        collection: _.keyBy(action.payload, '_id')
+        collection: keyBy(action.payload, '_id')
       };
     case types.DELETE_POST:
       return {
-        collection: _.omit(state.collection, action.payload._id)
+        collection: omit(state.collection, action.payload._id)
       };
     default:
       return state;

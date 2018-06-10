@@ -1,5 +1,11 @@
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
+const simpleVars = require('postcss-simple-vars');
+
 module.exports = {
-    plugins: [
-        require('precss')
-    ]
-}
+  plugins: [
+    precss,
+    autoprefixer,
+    simpleVars,
+  ],
+};

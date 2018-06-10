@@ -1,0 +1,6 @@
+.main {
+  .list-area {
+    display: flex;
+    width: 100%;
+  }
+}

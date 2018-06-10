@@ -1,0 +1,41 @@
+@import '../../style/css/variables.scss';
+
+.form {
+  margin-bottom: $md;
+
+  .form-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .form-title,
+  .form-text {
+    width: 500px;
+  }
+
+  .form-text {
+    height: 100px;
+    resize: none;
+    overflow: hidden;
+  }
+
+  .form-alert {
+    height: 20px;
+    margin: 0;
+    font-size: 15px;
+    text-align: left;
+    color: $red;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .form {
+    .form-title,
+    .form-text {
+      width: 100%;
+    }
+  }
+}
