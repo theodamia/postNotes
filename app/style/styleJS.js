@@ -1,24 +1,23 @@
-$(function() {
+$(() => {
   // On double click the title/text of a list item en/disable it
-  $(document).on('dblclick', '.plist__item-title input, .plist__item-text input', function(e) {
+  $(document).on('dblclick', '.list-item input, .list-item input', function () {
     $(this).prop({
-      readOnly: false
+      readOnly: false,
     });
 
-    $('.plist__item-title, .plist__item-text').blur(function() {
+    $('.list-item-title input, .list-item-text input').blur(function () {
       $(this).prop({
-        readOnly: true
+        readOnly: true,
       });
     });
   });
 
   // Pressing enter on list item title/text disables it
-  $(document).on('keydown', function(e) {
-    if(e.which === 13){
-      $('.plist__item-title, .plist__item-text').prop({
-        readOnly: true
+  $(document).on('keydown', (e) => {
+    if (e.which === 13) {
+      $('.list-item-title, .list-item-text').prop({
+        readOnly: true,
       });
     }
   });
-
 });

@@ -1,59 +1,49 @@
-var Webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var webpackConfig = require('./../webpack.config.js');
-var path = require('path');
-var mainPath = path.resolve(__dirname, '..', 'index', 'index.js');
+const Webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+const webpackConfig = require('./../webpack.config.js');
 
-module.exports = function () {
-
+module.exports = function devServerConfig() {
   // First we fire up Webpack an pass in the configuration we created
-  var bundleStart = null;
-  var compiler = Webpack(webpackConfig);
+  let bundleStart = null;
+  const compiler = Webpack(webpackConfig);
 
   // We give notice in the terminal when it starts bundling and
   // set the time it started
-  compiler.plugin('compile', function() {
+  compiler.plugin('compile', () => {
     console.log('Bundling...');
     bundleStart = Date.now();
   });
 
   // We also give notice when it is done compiling, including the
   // time it took.
-  compiler.plugin('done', function() {
-    console.log('Bundled in ' + (Date.now() - bundleStart) + 'ms!');
+  compiler.plugin('done', () => {
+    console.log(`Bundled in ${Date.now() - bundleStart}ms!`);
   });
 
-  var bundler = new WebpackDevServer(compiler, {
+  const bundler = new WebpackDevServer(compiler, {
     // We need to tell Webpack to serve our bundled application
     // from the build path. When proxying:
     // http://localhost:3000/build -> http://localhost:8080/build
     publicPath: '/build/',
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
-      'Access-Control-Allow-Credentials': true
-    }
-    // devServer: {
-    //   // Configure hot replacement
-    //   hot: true,
-    //   // The rest is terminal configurations
-    //   quiet: true,
-    //   noInfo: true,
-    //   // lazy: true
-    //   // stats: {
-    //   //   colors: false,
-    //   //   assets:false,
-    //   //   hash: false,
-    //   //   version: false
-    //   // }
-    // }
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      'Access-Control-Allow-Credentials': true,
+    },
+    port: 8080,
+    host: 'localhost',
+    noInfo: true,
+    historyApiFallback: {
+      index: 'public/index.html',
+    },
+    open: true,
+    openPage: 'public/',
   });
 
   // We fire up the development server and give notice in the terminal
   // that we are starting the initial bundle
-  bundler.listen(8080, 'localhost', function () {
+  bundler.listen(8080, 'localhost', () => {
     console.log('Bundling project, please wait...');
   });
-
 };

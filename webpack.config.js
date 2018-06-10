@@ -1,66 +1,74 @@
-var Webpack = require('webpack');
-var path = require('path');
+const Webpack = require('webpack');
+const path = require('path');
 
-var nodeModulesPath = path.resolve(__dirname, 'node_modules');
-var buildPath = path.resolve(__dirname, 'public', 'build');
-var mainPath = path.resolve(__dirname, 'app', 'index.js');
+const buildPath = path.resolve(__dirname, 'public', 'build');
+const mainPath = path.resolve(__dirname, 'app', 'index.jsx');
 
-var config = {
+const config = {
   devtool: 'eval',
   entry: [
     'webpack/hot/dev-server',
     'webpack-dev-server/client?http://localhost:8080',
-    mainPath
+    mainPath,
   ],
   output: {
     filename: 'bundle.js',
     path: buildPath,
-    publicPath: '/build/'
+    publicPath: '/build/',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
   module: {
-    rules: [{
-      test: [/\.js$|\.jsx$/],
-      loader: 'babel-loader',
-      exclude: [nodeModulesPath]
+    rules: [
+      {
+        test: [/\.js$|\.jsx$/],
+        use: ['babel-loader'],
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(css|scss)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'style-loader', // creates style nodes from JS strings
+          }, {
+            loader: 'css-loader', // translates CSS into CommonJS
+            options: {
+              importLoaders: 1,
+            },
+          }, {
+            loader: 'postcss-loader',
+          }, {
+            loader: 'sass-loader', // compiles Sass to CSS
+          },
+        ],
+      },
+    ],
+  },
+  devServer: {
+    port: 8080,
+    host: 'localhost',
+    noInfo: true,
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      'Access-Control-Allow-Credentials': true,
     },
-    {
-      test: /\.(css|pcss|scss)$/,
-      exclude: /node_modules/,
-      use: [
-        {
-          loader: 'style-loader'
-        },
-        {
-          loader: 'css-loader'
-          // options: {
-          //     importLoaders: 1,
-          // }
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            config: {
-              path: path.resolve(__dirname, 'postcss.config.js')
-            }
-          }
-        },
-        {
-          loader: "sass-loader"
-        }
-      ]
-    }]
+    historyApiFallback: {
+      index: 'public/index.html',
+    },
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
+    open: true,
+    openPage: 'public/',
   },
   plugins: [
     new Webpack.HotModuleReplacementPlugin(),
     new Webpack.NamedModulesPlugin(),
-    new Webpack.ProvidePlugin({
-      React: 'react',
-      ReactDOM: 'react-dom',
-      cookie: 'cookie',
-      axios: 'axios',
-      '_': 'lodash'
-    })
-  ]
+  ],
 };
 
 module.exports = config;

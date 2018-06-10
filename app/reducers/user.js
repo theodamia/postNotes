@@ -1,28 +1,27 @@
-import { compineReducers } from 'react-redux'
-import * as types from '../constants/index'
+import * as types from '../constants/index';
 
 const initialState = {
-  auth: {}
-}
+  auth: {},
+};
 
 const user = (
   state = initialState,
-  action
+  action,
 ) => {
   switch (action.type) {
     case types.SIGN_UP_USER:
       return {
         ...state,
-       auth: action.payload
+        auth: action.payload,
       };
     case types.LOGIN_REQUEST:
       return {
-         ...state,
-        auth: action.payload
+        ...state,
+        auth: action.payload,
       };
     case types.LOG_OUT_REQUEST:
       return {
-        auth: action.payload === null
+        auth: action.payload === null,
       };
     default:
       return state;

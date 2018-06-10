@@ -1,0 +1,86 @@
+@import '../../../style/css/variables.scss';
+
+.list-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: 2px solid $blue-light;
+
+  input {
+    width: 100%;
+    border: 0;
+    background-color: inherit;
+  }
+
+  .list-item-title,
+  .list-item-text,
+  .list-item-icons {
+    padding: 10px 15px;
+  }
+
+  .list-item-title {
+    color: $blue;
+  }
+
+  .list-item-icons {
+    display: flex;
+
+    .dropdown-item a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dropdown-palette {
+      width: 10px;
+      height: 10px;
+      &--default {
+        background-color: $blue-light;
+      }
+      &--important {
+        background-color: $light-red;
+      }
+      &--ongoing {
+        background-color: $yellow;
+      }
+      &--completed {
+        background-color: $green;
+      }
+    }
+  }
+}
+
+.list-item {
+  &--default {
+    .list-item-title {
+      background-color: $blue-light;
+    }
+  }
+  &--important {
+    .list-item-title {
+      background-color: $light-red ;
+      color: $white;
+    }
+  }
+  &--ongoing {
+    .list-item-title {
+      background-color: $yellow;
+      color: $black;
+    }
+  }
+  &--completed {
+    .list-item-title {
+        background-color: $green-light;
+        color: $green;
+    }
+  }
+}
+
+.icon {
+  margin-left: 10px;
+  padding: 4px 0;
+  font-size: 22px;
+  cursor: pointer;
+  border: 1px solid #000000;
+  border-radius: 5px;
+}
