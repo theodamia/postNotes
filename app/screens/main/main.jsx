@@ -74,12 +74,11 @@ Main.propTypes = {
   updatePostStatus: PropTypes.func,
   deletePostAsync: PropTypes.func,
   user: PropTypes.shape({
-    _id: PropTypes.number,
+    _id: PropTypes.string,
     email: PropTypes.string,
     password: PropTypes.string,
   }),
   posts: PropTypes.arrayOf(PropTypes.object),
-
 };
 
 Main.defaultProps = {

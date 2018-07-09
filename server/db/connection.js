@@ -1,3 +1,4 @@
+/* eslint no-console: [{ allow: ["log"] }] */
 import mongoose from 'mongoose';
 
 module.exports = {

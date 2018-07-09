@@ -21,7 +21,7 @@ const user = (
       };
     case types.LOG_OUT_REQUEST:
       return {
-        auth: action.payload === null,
+        auth: {},
       };
     default:
       return state;

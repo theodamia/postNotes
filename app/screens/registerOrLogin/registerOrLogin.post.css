@@ -20,11 +20,19 @@
       font-size: 16px;
       text-align: center;
 
-        a {
+        button {
+          padding: 0;
+          border: none;
+          background: none;
           text-decoration: none;
           font-weight: 800;
           font-size: 18px;
+          color: #337ab7;
           cursor: pointer;
+          
+          &:focus {
+            outline:none;
+          }
         }
     }
 

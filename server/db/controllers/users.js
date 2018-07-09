@@ -17,17 +17,15 @@ module.exports = {
     });
 
     User.findOne({ email: req.body.email }, (findErr, existingUser) => {
-      if (existingUser) {
-        return res.sendStatus(409);
-      }
-      user.save((err, user) => {
-        if (err) {
-          return handleError(err);
-          res.json(user);
-        }
-        res.json(user);
+      if (existingUser) return res.sendStatus(409);
+
+      user.save((err) => {
+        if (err) return res.send(500, { error: err });
         console.log('Your user has been saved');
+
+        return res.json(user);
       });
+      return res.json(user);
     });
   },
 };

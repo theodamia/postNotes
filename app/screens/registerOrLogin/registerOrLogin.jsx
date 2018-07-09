@@ -47,21 +47,9 @@ class RegisterOrLogin extends React.Component {
     });
   }
   handleUserRegister = (user) => {
-    // const that = this;
-    // this.props.signUpAsync(user).catch((error) => {
-    //   if (error.response.status === '409') {
-    //     this.setState({ userExist: true });
-    //   }
-    // });
     this.props.signUpAsync(user);
   }
   handleLogIn = (user) => {
-    // const that = this;
-    // this.props.logInAsync(user).catch((error) => {
-    //   if (error.response.status === '401') {
-    //     that.setState({ wrongUser: true });
-    //   }
-    // });
     this.props.logInAsync(user);
   }
   render() {
@@ -70,12 +58,12 @@ class RegisterOrLogin extends React.Component {
         <h1>{this.state.registerOrLogin ? 'Register with Email' : 'Login with Email'}</h1>
         <div className="login-text">
           {this.state.registerOrLogin ? 'Already have an account? ' : 'You need an account? ' }
-          <a
-            role="presentation"
+          <button
             onClick={() => this.setState({ registerOrLogin: !this.state.registerOrLogin })}
+            onKeyPress={() => this.setState({ registerOrLogin: !this.state.registerOrLogin })}
           >
             {this.state.registerOrLogin ? 'Login now.' : 'Register.'}
-          </a>
+          </button>
         </div>
         <div className="login-form">
           <form onSubmit={this.handleSubmit} >

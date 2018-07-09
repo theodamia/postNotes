@@ -39,10 +39,6 @@ const publicPath = path.resolve(__dirname, 'public');
 
 app.use(express.static(publicPath));
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-// });
-
 app.get('/public', (req, res) => {
   res.render('public/index');
 });
@@ -87,7 +83,7 @@ app.use(session({
   saveUninitialized: false,
 }));
 
-// Initialize Passport and restore authentication state, if any, from the
+// Initialize PassportJS and restore authentication state, if any, from the
 // session.
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
