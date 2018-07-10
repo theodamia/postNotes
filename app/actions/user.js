@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import { hashHistory } from 'react-router-dom';
+import { hashHistory } from 'react-router';
 import * as types from '../constants/index';
 
 export function signUp(data) {
@@ -10,18 +10,12 @@ export function signUp(data) {
 }
 
 export function signUpAsync(user) {
-  console.log('adsaad');
   return (dispath) => {
-    axios.post('http://localhost:3000/api/users', { email: user.email, password: user.password });
-    console.log('asdas')
+    axios.post('http://localhost:3000/api/users', { email: user.email, password: user.password })
       .then((response) => {
-        console.log(response.data);
         dispath(signUp(response.data));
-        // hashHistory.push(`/?user=${response.data.email}/`);
+        hashHistory.push(`/?user=${response.data.email}/`);
       });
-    // .catch((error) => {
-    //   console.log(error);
-    // });
   };
 }
 
@@ -44,11 +38,8 @@ export function logInAsync(user) {
   })
     .then((response) => {
       dispath(logIn(response.data));
-      // hashHistory.push(`/?user=${response.data.email}/`);
+      hashHistory.push(`/?user=${response.data.email}/`);
     });
-  // .catch((error) => {
-  //   console.log(error);
-  // });
 }
 
 export function logOut() {
@@ -58,20 +49,18 @@ export function logOut() {
 }
 
 export function logOutAsync() {
-  return (dispatch) => {
-    axios({
-      method: 'get',
-      url: 'http://localhost:3000/api/users/logout',
-      withCredentials: true,
+  return dispatch => axios({
+    method: 'get',
+    url: 'http://localhost:3000/api/users/logout',
+    withCredentials: true,
+  })
+    .then((response) => {
+      console.log(response.data);
+      console.log('success logout');
+      dispatch(logOut());
     })
-      .then((response) => {
-        console.log(response);
-        console.log('success logout');
-        dispatch(logOut());
-      })
-      .catch((error) => {
-        console.log('logout error:');
-        console.log(error);
-      });
-  };
+    .catch((error) => {
+      console.log('logout error:');
+      console.log(error);
+    });
 }

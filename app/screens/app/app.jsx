@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Navigation from '../../components/navigation/navigation';
+import Navigation from '../../components/navigation/navigationContainer';
 
-import '../../style/css/style.post.css';
 import './app.post.css';
+import '../../style/css/style.post.css';
 import '../../style/styleJS';
 
 const App = props => (
